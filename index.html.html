@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAD — Munchies After Dark</title>
+<meta name="description" content="Premium quality fast food, top notch service, pocket friendly prices. Order burgers, wraps, pasta & more. Open daily 12PM – 3AM.">
+<meta property="og:title" content="MAD — Munchies After Dark">
+<meta property="og:description" content="Premium burgers, wraps & more. Open daily 12PM – 3AM. Order now!">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<style>
+/* ===================== TOKENS ===================== */
+:root {
+  --gold:      #f9bd3f;
+  --black:     #020203;
+  --cream:     #f7e7ce;
+  --dark:      #0c0902;
+  --panel:     #100d07;
+  --border:    rgba(249,189,63,.14);
+  --border-hi: rgba(249,189,63,.5);
+  --gold-glow: rgba(249,189,63,.18);
+  --text-dim:  rgba(247,231,206,.45);
+  --text-faint:rgba(247,231,206,.22);
+
+  /* PAYSTACK KEY — replace with your live key */
+  --paystack-key: "pk_test_REPLACE_WITH_YOUR_PAYSTACK_PUBLIC_KEY";
+}
+
+/* ===================== RESET ===================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--black);
+  color: var(--cream);
+  font-family: 'Barlow', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: inherit; }
+input, textarea, select { font-family: inherit; }
+
+/* grain overlay */
+body::after {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:9000;
+  opacity:.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===================== HEADER ===================== */
+#header {
+  position: sticky; top: 0; z-index: 800;
+  background: rgba(2,2,3,.96); backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  height: 68px; padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: box-shadow .3s;
+}
+#header.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,.6); }
+
+.logo-wrap { display:flex; align-items:baseline; gap:10px; }
+.logo-mad {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:30px; letter-spacing:5px; color:var(--gold); line-height:1;
+}
+.logo-tagline {
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--cream); opacity:.35; font-weight:500;
+}
+
+.header-nav { display:flex; align-items:center; gap:32px; }
+.header-nav a {
+  font-size:12px; letter-spacing:2.5px; text-transform:uppercase;
+  font-weight:600; opacity:.4; transition: opacity .2s, color .2s;
+}
+.header-nav a:hover { opacity:1; color:var(--gold); }
+
+.halal-pill {
+  font-size:10px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--gold); border:1px solid var(--border-hi); padding:5px 12px; opacity:.85;
+}
+
+/* status dot */
+.status-dot {
+  display:flex; align-items:center; gap:7px;
+  font-size:11px; letter-spacing:1.5px; text-transform:uppercase; font-weight:600;
+}
+.dot {
+  width:8px; height:8px; border-radius:50%;
+  background:#4caf50; box-shadow:0 0 8px #4caf50;
+  animation: pulse-dot 2s ease infinite;
+}
+.dot.closed { background:#e53935; box-shadow:0 0 8px #e53935; animation:none; }
+@keyframes pulse-dot {
+  0%,100%{opacity:1;} 50%{opacity:.4;}
+}
+.status-text { color:var(--text-dim); }
+.status-text span { color:var(--cream); }
+
+.cart-btn {
+  background:var(--gold); color:var(--black); border:none;
+  padding:10px 22px; display:flex; align-items:center; gap:10px;
+  font-family:'Barlow Condensed',sans-serif; font-weight:800;
+  font-size:16px; letter-spacing:2px; text-transform:uppercase;
+  transition: background .2s, transform .15s;
+}
+.cart-btn:hover { background:var(--cream); transform:translateY(-1px); }
+.cart-num {
+  background:var(--black); color:var(--gold); border-radius:50%;
+  width:22px; height:22px; font-size:12px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Barlow',sans-serif;
+}
+
+/* ===================== HERO ===================== */
+.hero {
+  min-height: 94vh;
+  display: grid; grid-template-columns: 54% 46%;
+  position: relative; overflow: hidden;
+}
+
+.hero-left {
+  display:flex; flex-direction:column; justify-content:center;
+  padding: 80px 60px 80px 80px; position:relative; z-index:2;
+}
+
+.hero-eyebrow {
+  font-size:11px; letter-spacing:5px; text-transform:uppercase;
+  color:var(--gold); font-weight:600; margin-bottom:22px;
+  display:flex; align-items:center; gap:14px;
+}
+.hero-eyebrow::before {
+  content:''; display:block; width:28px; height:1px; background:var(--gold);
+}
+
+.hero-h1 {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size: clamp(76px,9vw,136px); line-height:.88;
+  text-transform:uppercase; letter-spacing:1px;
+  color:var(--cream); margin-bottom:32px;
+}
+.hero-h1 .g { color:var(--gold); }
+.hero-h1 .o {
+  -webkit-text-stroke: 2px var(--gold); color:transparent;
+}
+
+.hero-desc {
+  color:var(--text-dim); font-size:15px; line-height:1.8;
+  max-width:390px; margin-bottom:20px; font-weight:300;
+}
+
+.hero-hours-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  border:1px solid var(--border); padding:8px 16px;
+  font-size:12px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:40px; width:fit-content;
+}
+.hero-hours-badge span { color:var(--cream); opacity:.6; }
+
+.hero-ctas { display:flex; gap:14px; flex-wrap:wrap; }
+
+.cta-gold {
+  background:var(--gold); color:var(--black); border:none;
+  padding:16px 38px; font-family:'Barlow Condensed',sans-serif;
+  font-weight:900; font-size:19px; letter-spacing:3px; text-transform:uppercase;
+  transition: background .2s, transform .2s, box-shadow .2s;
+  display:inline-block;
+}
+.cta-gold:hover {
+  background:var(--cream); transform:translateY(-2px);
+  box-shadow:0 10px 32px rgba(249,189,63,.3);
+}
+
+.cta-outline {
+  background:none; border:1px solid rgba(247,231,206,.2);
+  color:var(--cream); padding:15px 28px;
+  font-family:'Barlow Condensed',sans-serif; font-weight:700;
+  font-size:16px; letter-spacing:2px; text-transform:uppercase;
+  transition: border-color .2s, color .2s;
+  display:inline-block;
+}
+.cta-outline:hover { border-color:var(--gold); color:var(--gold); }
+
+.hero-right {
+  position:relative; display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.hero-right::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 50%, rgba(249,189,63,.16) 0%, transparent 68%);
+}
+.hero-emoji {
+  font-size:190px; position:relative; z-index:2;
+  filter:drop-shadow(0 24px 64px rgba(249,189,63,.28));
+  animation:float 5s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100%{transform:translateY(0) rotate(-2deg);}
+  50%{transform:translateY(-20px) rotate(2.5deg);}
+}
+.hero-flag {
+  position:absolute; bottom:56px; right:40px; z-index:3;
+  background:var(--gold); color:var(--black);
+  padding:14px 18px; text-align:center;
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:12px; letter-spacing:2px; text-transform:uppercase; line-height:1.5;
+}
+
+/* ===================== TICKER ===================== */
+.ticker-wrap {
+  background:var(--gold); overflow:hidden; padding:11px 0;
+}
+.ticker {
+  display:flex; animation:run-ticker 30s linear infinite; white-space:nowrap;
+}
+.tick {
+  font-family:'Barlow Condensed',sans-serif; font-weight:800;
+  font-size:14px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--black); padding:0 28px;
+  display:flex; align-items:center; gap:20px;
+}
+.tick::after { content:'✦'; opacity:.35; }
+@keyframes run-ticker {
+  from{transform:translateX(0);} to{transform:translateX(-50%);}
+}
+
+/* ===================== SECTION COMMONS ===================== */
+.section { padding: 88px 80px; }
+.section-eyebrow {
+  font-size:11px; letter-spacing:5px; text-transform:uppercase;
+  color:var(--gold); font-weight:600; margin-bottom:10px;
+}
+.section-title {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:68px; text-transform:uppercase; letter-spacing:2px; line-height:.9;
+}
+.divider {
+  width:100%; height:1px; background:var(--border); margin:0;
+}
+
+/* ===================== ABOUT ===================== */
+#about { background: var(--panel); }
+.about-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center;
+  margin-top:60px;
+}
+.about-visual {
+  position:relative; display:flex; align-items:center; justify-content:center;
+}
+.about-circle {
+  width:320px; height:320px; border-radius:50%;
+  border:1px solid var(--border-hi);
+  display:flex; align-items:center; justify-content:center;
+  font-size:140px; position:relative;
+  animation:slow-spin 20s linear infinite;
+}
+@keyframes slow-spin {
+  from{transform:rotate(0deg);} to{transform:rotate(360deg);}
+}
+.about-circle-inner {
+  animation:counter-spin 20s linear infinite;
+}
+@keyframes counter-spin {
+  from{transform:rotate(0deg);} to{transform:rotate(-360deg);}
+}
+.about-ring {
+  position:absolute; inset:-24px; border-radius:50%;
+  border:1px dashed rgba(249,189,63,.2);
+}
+.about-text { }
+.about-body {
+  font-size:16px; line-height:1.9; color:var(--text-dim);
+  font-weight:300; margin-bottom:32px;
+}
+.about-body strong { color:var(--cream); font-weight:600; }
+.about-pillars {
+  display:grid; grid-template-columns:1fr 1fr; gap:16px;
+}
+.pillar {
+  border:1px solid var(--border); padding:18px 20px;
+  transition: border-color .2s, background .2s;
+}
+.pillar:hover { border-color:var(--border-hi); background:var(--gold-glow); }
+.pillar-icon { font-size:22px; display:block; margin-bottom:8px; }
+.pillar-name {
+  font-family:'Barlow Condensed',sans-serif; font-weight:700;
+  font-size:14px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:4px;
+}
+.pillar-desc { font-size:12px; color:var(--text-dim); line-height:1.6; }
+
+/* ===================== HOURS BANNER ===================== */
+.hours-banner {
+  background:var(--gold); padding:28px 80px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;
+}
+.hours-banner-left { display:flex; align-items:center; gap:20px; }
+.hours-banner-label {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:36px; letter-spacing:2px; text-transform:uppercase; color:var(--black);
+}
+.hours-banner-time {
+  font-family:'Barlow Condensed',sans-serif; font-weight:700;
+  font-size:20px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--black); opacity:.6;
+}
+.hours-banner-days {
+  font-size:13px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--black); opacity:.5; font-weight:600;
+}
+.hours-live-status {
+  display:flex; align-items:center; gap:10px;
+  font-family:'Barlow Condensed',sans-serif; font-weight:800;
+  font-size:18px; letter-spacing:2px; text-transform:uppercase; color:var(--black);
+}
+.hours-live-dot {
+  width:12px; height:12px; border-radius:50%; background:var(--black);
+  animation:pulse-dot 2s ease infinite;
+}
+.hours-live-dot.closed { animation:none; opacity:.4; }
+
+/* ===================== MENU ===================== */
+#menu { }
+.menu-top {
+  display:flex; align-items:flex-end; justify-content:space-between;
+  border-bottom:1px solid var(--border); padding-bottom:28px; margin-bottom:44px;
+}
+.menu-note {
+  text-align:right; font-size:12px; color:var(--gold);
+  letter-spacing:1.5px; line-height:1.9; opacity:.75;
+}
+
+.cat-bar {
+  display:flex; gap:0; overflow-x:auto; scrollbar-width:none;
+  border-bottom:1px solid rgba(249,189,63,.08); margin-bottom:44px;
+}
+.cat-bar::-webkit-scrollbar{display:none;}
+.cat-btn {
+  background:none; border:none; border-bottom:3px solid transparent;
+  color:var(--text-faint); font-family:'Barlow Condensed',sans-serif;
+  font-weight:700; font-size:15px; letter-spacing:3px; text-transform:uppercase;
+  padding:11px 26px 13px; white-space:nowrap; transition:all .2s;
+  margin-bottom:-1px;
+}
+.cat-btn:hover { color:var(--cream); }
+.cat-btn.on { color:var(--gold); border-bottom-color:var(--gold); }
+
+.menu-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(305px,1fr)); gap:18px;
+}
+
+.card {
+  background:var(--panel); border:1px solid var(--border);
+  padding:24px; position:relative; overflow:hidden;
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+  display:none; cursor:default;
+}
+.card.on { display:block; }
+.card:hover {
+  transform:translateY(-4px); border-color:var(--border-hi);
+  box-shadow:0 18px 52px rgba(249,189,63,.1);
+}
+.card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--gold), transparent);
+  opacity:0; transition:opacity .25s;
+}
+.card:hover::before { opacity:1; }
+
+.card-tag {
+  position:absolute; top:0; right:22px;
+  background:var(--gold); color:var(--black);
+  font-family:'Barlow Condensed',sans-serif; font-weight:800;
+  font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:4px 10px;
+}
+
+.card-emoji {
+  font-size:54px; display:block; margin-bottom:16px;
+  filter:drop-shadow(0 4px 14px rgba(0,0,0,.45));
+  transition:transform .3s;
+}
+.card:hover .card-emoji { transform:scale(1.1) rotate(-5deg); }
+
+.card-name {
+  font-family:'Barlow Condensed',sans-serif; font-weight:800;
+  font-size:22px; letter-spacing:1px; text-transform:uppercase;
+  color:var(--cream); margin-bottom:7px;
+}
+.card-desc {
+  font-size:13px; color:var(--text-dim); line-height:1.65;
+  margin-bottom:8px; min-height:52px; font-weight:300;
+}
+.card-sub {
+  font-size:11px; color:var(--gold); opacity:.55;
+  letter-spacing:1px; margin-bottom:18px; font-style:italic;
+}
+.card-foot {
+  display:flex; align-items:center; justify-content:space-between;
+}
+.card-price {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:27px; color:var(--gold); letter-spacing:1px;
+}
+.card-currency { font-size:14px; opacity:.6; font-weight:600; margin-right:1px; }
+
+.add-btn {
+  background:var(--gold-glow); border:1px solid rgba(249,189,63,.35);
+  color:var(--gold); width:42px; height:42px; font-size:24px;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .2s; font-weight:300;
+}
+.add-btn:hover { background:var(--gold); color:var(--black); transform:scale(1.1); }
+.add-btn:active { transform:scale(.95); }
+
+/* ===================== CART SIDEBAR ===================== */
+.overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,.78); z-index:900;
+  opacity:0; pointer-events:none; transition:opacity .3s;
+}
+.overlay.on { opacity:1; pointer-events:all; }
+
+.cart-side {
+  position:fixed; top:0; right:-500px; width:480px; height:100vh;
+  background:var(--dark); border-left:1px solid rgba(249,189,63,.25);
+  z-index:910; display:flex; flex-direction:column;
+  transition:right .36s cubic-bezier(.4,0,.2,1);
+}
+.cart-side.on { right:0; }
+
+.cs-head {
+  padding:26px 32px; border-bottom:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center; flex-shrink:0;
+}
+.cs-title {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:26px; letter-spacing:3px; text-transform:uppercase; color:var(--gold);
+}
+.cs-close {
+  background:none; border:1px solid rgba(247,231,206,.15);
+  color:var(--cream); width:36px; height:36px; font-size:18px;
+  display:flex; align-items:center; justify-content:center; transition:all .2s;
+}
+.cs-close:hover { background:var(--gold); border-color:var(--gold); color:var(--black); }
+
+/* Steps indicator */
+.cs-steps {
+  display:flex; border-bottom:1px solid var(--border); flex-shrink:0;
+}
+.cs-step {
+  flex:1; padding:10px; text-align:center;
+  font-family:'Barlow Condensed',sans-serif; font-weight:700;
+  font-size:12px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text-faint); border-bottom:2px solid transparent;
+  transition:all .2s;
+}
+.cs-step.active { color:var(--gold); border-bottom-color:var(--gold); }
+.cs-step.done { color:var(--text-dim); }
+
+.cs-body { flex:1; overflow-y:auto; padding:24px 32px; }
+.cs-body::-webkit-scrollbar{width:3px;}
+.cs-body::-webkit-scrollbar-thumb{background:rgba(249,189,63,.3);}
+
+.empty-cart {
+  text-align:center; padding:70px 0;
+}
+.empty-cart-icon { font-size:60px; display:block; margin-bottom:14px; opacity:.4; }
+.empty-cart p {
+  font-family:'Barlow Condensed',sans-serif; font-weight:700;
+  font-size:14px; letter-spacing:3px; text-transform:uppercase; opacity:.25;
+}
+
+.cart-item {
+  display:flex; align-items:center; gap:14px;
+  padding:15px 0; border-bottom:1px solid rgba(247,231,206,.05);
+  animation:slide-in .25s ease;
+}
+@keyframes slide-in {
+  from{opacity:0;transform:translateX(18px);}
+  to{opacity:1;transform:translateX(0);}
+}
+.ci-emoji { font-size:34px; flex-shrink:0; }
+.ci-info { flex:1; }
+.ci-name { font-size:14px; font-weight:600; color:var(--cream); margin-bottom:3px; }
+.ci-price {
+  font-family:'Barlow Condensed',sans-serif; font-weight:700;
+  font-size:16px; color:var(--gold);
+}
+.qty-ctrl {
+  display:flex; align-items:center; gap:10px;
+  background:rgba(249,189,63,.07); border:1px solid rgba(249,189,63,.2); padding:6px 12px;
+}
+.q-btn {
+  background:none; border:none; color:var(--cream);
+  font-size:18px; line-height:1; transition:color .15s;
+}
+.q-btn:hover { color:var(--gold); }
+.q-num { font-size:14px; font-weight:600; min-width:18px; text-align:center; }
+
+/* Cart footer */
+.cs-foot { padding:20px 32px; border-top:1px solid var(--border); flex-shrink:0; }
+.price-row {
+  display:flex; justify-content:space-between; margin-bottom:6px;
+  font-size:13px; color:var(--text-dim);
+}
+.grand-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+  margin:8px 0 18px;
+}
+.grand-lbl {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:18px; letter-spacing:3px; text-transform:uppercase;
+}
+.grand-val {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:32px; color:var(--gold);
+}
+
+/* order method chooser */
+.method-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.method-card {
+  border:1px solid var(--border); padding:16px 14px; text-align:center;
+  transition:all .2s; background:none;
+}
+.method-card:hover, .method-card.sel {
+  border-color:var(--gold); background:var(--gold-glow);
+}
+.method-icon { font-size:26px; display:block; margin-bottom:6px; }
+.method-name {
+  font-family:'Barlow Condensed',sans-serif; font-weight:700;
+  font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--cream);
+}
+.method-desc { font-size:11px; color:var(--text-dim); margin-top:3px; }
+
+/* delivery form */
+.d-form { display:none; }
+.d-form.on { display:block; }
+.f-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.f-full { grid-column:1/-1; }
+.f-group { display:flex; flex-direction:column; gap:5px; }
+.f-label {
+  font-size:10px; letter-spacing:2px; text-transform:uppercase;
+  color:rgba(247,231,206,.4); font-weight:600;
+}
+.f-input {
+  background:rgba(249,189,63,.05); border:1px solid rgba(249,189,63,.2);
+  color:var(--cream); padding:10px 14px; font-size:14px; outline:none;
+  transition:border-color .2s; width:100%;
+}
+.f-input:focus { border-color:var(--gold); }
+.f-input::placeholder { color:rgba(247,231,206,.18); }
+.f-error { font-size:11px; color:#e53935; margin-top:4px; display:none; }
+
+.action-btn {
+  width:100%; background:var(--gold); color:var(--black); border:none;
+  padding:17px; font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:20px; letter-spacing:4px; text-transform:uppercase;
+  transition:all .2s; margin-top:14px;
+}
+.action-btn:hover { background:var(--cream); transform:translateY(-2px); }
+.action-btn:disabled { opacity:.3; cursor:not-allowed; transform:none; }
+
+.wa-btn {
+  width:100%; background:#25D366; color:#fff; border:none;
+  padding:17px; font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:20px; letter-spacing:3px; text-transform:uppercase;
+  transition:all .2s; margin-top:10px; display:flex; align-items:center;
+  justify-content:center; gap:10px;
+}
+.wa-btn:hover { background:#1ebc59; transform:translateY(-2px); }
+
+/* ===================== PAYMENT MODAL ===================== */
+.pay-modal {
+  position:fixed; inset:0; background:rgba(0,0,0,.88); z-index:950;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .3s;
+}
+.pay-modal.on { opacity:1; pointer-events:all; }
+.pay-box {
+  background:var(--panel); border:1px solid rgba(249,189,63,.3);
+  padding:48px; max-width:440px; width:90%;
+  animation:pop .35s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+}
+@keyframes pop {
+  from{transform:scale(.8);opacity:0;} to{transform:scale(1);opacity:1;}
+}
+.pay-close {
+  position:absolute; top:16px; right:16px;
+  background:none; border:1px solid rgba(247,231,206,.15);
+  color:var(--cream); width:32px; height:32px; font-size:16px;
+  display:flex; align-items:center; justify-content:center; transition:all .2s;
+}
+.pay-close:hover { background:var(--gold); border-color:var(--gold); color:var(--black); }
+.pay-title {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:32px; letter-spacing:2px; text-transform:uppercase; color:var(--gold);
+  margin-bottom:8px;
+}
+.pay-sub { font-size:13px; color:var(--text-dim); line-height:1.7; margin-bottom:24px; }
+.pay-amount {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:48px; color:var(--gold); margin-bottom:24px; display:block;
+}
+.pay-email-wrap { margin-bottom:18px; }
+.pay-note {
+  font-size:11px; color:var(--text-faint); letter-spacing:1px;
+  margin-top:12px; text-align:center; line-height:1.7;
+}
+
+/* ===================== ORDER SUCCESS ===================== */
+.success-modal {
+  position:fixed; inset:0; background:rgba(0,0,0,.9); z-index:960;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .3s;
+}
+.success-modal.on { opacity:1; pointer-events:all; }
+.success-box {
+  background:var(--panel); border:1px solid rgba(249,189,63,.35);
+  padding:56px 48px; max-width:460px; width:90%; text-align:center;
+  animation:pop .4s cubic-bezier(.34,1.56,.64,1);
+}
+.s-icon { font-size:72px; display:block; margin-bottom:18px; }
+.s-title {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:52px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:12px;
+}
+.s-sub { font-size:14px; color:var(--text-dim); line-height:1.8; margin-bottom:22px; }
+.s-id {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:22px; color:var(--gold); letter-spacing:4px;
+  display:block; margin-bottom:8px;
+}
+.s-eta { font-size:13px; color:var(--text-dim); margin-bottom:32px; }
+.s-eta strong { color:var(--gold); }
+.s-close {
+  background:none; border:1px solid rgba(247,231,206,.2);
+  color:var(--cream); padding:12px 36px;
+  font-family:'Barlow Condensed',sans-serif; font-weight:700;
+  font-size:16px; letter-spacing:3px; text-transform:uppercase;
+  transition:all .2s;
+}
+.s-close:hover { background:var(--gold); border-color:var(--gold); color:var(--black); }
+
+/* ===================== TOAST ===================== */
+.toast {
+  position:fixed; bottom:28px; left:50%;
+  transform:translateX(-50%) translateY(14px);
+  background:var(--gold); color:var(--black);
+  padding:11px 26px; font-family:'Barlow Condensed',sans-serif;
+  font-weight:700; font-size:15px; letter-spacing:2px; text-transform:uppercase;
+  opacity:0; transition:all .3s; pointer-events:none; z-index:9999;
+  white-space:nowrap;
+}
+.toast.on { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ===================== FOOTER ===================== */
+footer {
+  background:#050402; border-top:1px solid var(--border);
+  padding:56px 80px 0;
+}
+.footer-grid {
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:48px; padding-bottom:48px; border-bottom:1px solid var(--border);
+}
+.f-brand-name {
+  font-family:'Barlow Condensed',sans-serif; font-weight:900;
+  font-size:42px; letter-spacing:4px; color:var(--gold); display:block; margin-bottom:8px;
+}
+.f-brand-sub {
+  font-size:11px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--text-dim); margin-bottom:20px; display:block;
+}
+.f-brand-desc { font-size:13px; color:var(--text-faint); line-height:1.9; font-weight:300; }
+.f-social {
+  display:flex; gap:12px; margin-top:20px;
+}
+.f-soc-btn {
+  border:1px solid var(--border); color:var(--text-dim);
+  width:38px; height:38px; display:flex; align-items:center; justify-content:center;
+  font-size:16px; transition:all .2s;
+}
+.f-soc-btn:hover { border-color:var(--gold); color:var(--gold); }
+.f-col-title {
+  font-family:'Barlow Condensed',sans-serif; font-weight:800;
+  font-size:13px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:18px;
+}
+.f-col a, .f-col p {
+  font-size:13px; color:var(--text-dim); line-height:2.2;
+  display:block; transition:color .2s;
+}
+.f-col a:hover { color:var(--gold); }
+.footer-bottom {
+  padding:18px 0; display:flex; justify-content:space-between; align-items:center;
+}
+.footer-bottom p { font-size:11px; color:var(--text-faint); letter-spacing:1px; }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width:900px) {
+  #header { padding:0 20px; }
+  .header-nav { display:none; }
+  .hero { grid-template-columns:1fr; min-height:auto; }
+  .hero-left { padding:60px 24px 40px; text-align:center; }
+  .hero-eyebrow { justify-content:center; }
+  .hero-h1 { font-size:clamp(60px,14vw,100px); }
+  .hero-desc, .hero-hours-badge { margin-left:auto; margin-right:auto; }
+  .hero-ctas { justify-content:center; }
+  .hero-right { min-height:220px; }
+  .hero-flag { right:16px; bottom:16px; font-size:10px; }
+  .section { padding:52px 24px; }
+  .about-grid { grid-template-columns:1fr; gap:40px; }
+  .about-circle { width:220px; height:220px; font-size:90px; }
+  .hours-banner { padding:24px; flex-direction:column; gap:12px; text-align:center; }
+  .menu-top { flex-direction:column; gap:12px; text-align:left; }
+  .menu-note { text-align:left; }
+  .menu-grid { grid-template-columns:1fr; }
+  .cart-side { width:100%; right:-100%; }
+  footer { padding:40px 24px 0; }
+  .footer-grid { grid-template-columns:1fr 1fr; }
+  .footer-bottom { flex-direction:column; gap:8px; text-align:center; }
+  .f-row { grid-template-columns:1fr; }
+  .method-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header id="header">
+  <div class="logo-wrap">
+    <span class="logo-mad">MAD</span>
+    <span class="logo-tagline">Munchies After Dark</span>
+  </div>
+  <nav class="header-nav">
+    <a href="#about">About</a>
+    <a href="#menu">Menu</a>
+    <a href="#footer">Contact</a>
+    <span class="halal-pill">☪ Halal Certified</span>
+  </nav>
+  <div style="display:flex;align-items:center;gap:20px;">
+    <div class="status-dot" id="liveStatus">
+      <span class="dot" id="statusDot"></span>
+      <span class="status-text" id="statusText"></span>
+    </div>
+    <button class="cart-btn" onclick="openCart()">
+      🛒 Order <span class="cart-num" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Cloud Kitchen · Est. January 2025 · 100% Halal</div>
+    <h1 class="hero-h1">
+      MUNCHIES<br>
+      <span class="g">AFTER</span><br>
+      <span class="o">DARK.</span>
+    </h1>
+    <p class="hero-desc">Premium quality fast food with top notch service and pocket friendly prices. Made fresh, delivered fast — every single time.</p>
+    <div class="hero-hours-badge">
+      🕛 Open Daily <span>&nbsp;12:00 PM — 3:00 AM</span>
+    </div>
+    <div class="hero-ctas">
+      <a class="cta-gold" href="#menu">Order Now</a>
+      <a class="cta-outline" href="#menu">View Full Menu</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <span class="hero-emoji">🍔</span>
+    <div class="hero-flag">All burgers<br>& sandwiches<br>served with<br>French fries</div>
+  </div>
+</section>
+
+<!-- ===== TICKER ===== -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="tick">Munchies After Dark</span>
+    <span class="tick">100% Halal Certified</span>
+    <span class="tick">Burgers · Wraps · Pasta · Desserts</span>
+    <span class="tick">Open Daily 12PM – 3AM</span>
+    <span class="tick">Premium Quality</span>
+    <span class="tick">Pocket Friendly Prices</span>
+    <span class="tick">Est. January 2025</span>
+    <span class="tick">Munchies After Dark</span>
+    <span class="tick">100% Halal Certified</span>
+    <span class="tick">Burgers · Wraps · Pasta · Desserts</span>
+    <span class="tick">Open Daily 12PM – 3AM</span>
+    <span class="tick">Premium Quality</span>
+    <span class="tick">Pocket Friendly Prices</span>
+    <span class="tick">Est. January 2025</span>
+  </div>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<section class="section" id="about">
+  <div class="section-eyebrow">Our Story</div>
+  <div class="section-title">WHO WE ARE</div>
+  <div class="about-grid">
+    <div class="about-visual">
+      <div class="about-circle">
+        <span class="about-circle-inner">🍔</span>
+        <div class="about-ring"></div>
+      </div>
+    </div>
+    <div class="about-text">
+      <p class="about-body">
+        Born in <strong>January 2025</strong>, Munchies After Dark (MAD) started with one clear mission — to bring <strong>premium quality fast food</strong> to your door without the premium price tag. We believe everyone deserves a proper, delicious meal no matter the hour.
+        <br><br>
+        From our kitchen to your table, every item on our menu is crafted with <strong>top notch standards</strong> — fresh ingredients, bold flavours, and <strong>100% Halal certified</strong>. We don't cut corners. Whether it's our signature MAD Burger or a late-night pasta fix, you're getting the best version of it, every time.
+      </p>
+      <div class="about-pillars">
+        <div class="pillar">
+          <span class="pillar-icon">⭐</span>
+          <div class="pillar-name">Premium Quality</div>
+          <div class="pillar-desc">Fresh ingredients and bold flavours — no compromises, ever.</div>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon">🤝</span>
+          <div class="pillar-name">Top Notch Service</div>
+          <div class="pillar-desc">Every order handled with care, speed, and respect.</div>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon">💛</span>
+          <div class="pillar-name">Pocket Friendly</div>
+          <div class="pillar-desc">Great food shouldn't break the bank — and ours won't.</div>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon">☪</span>
+          <div class="pillar-name">100% Halal</div>
+          <div class="pillar-desc">Certified Halal — so you can order with full confidence.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOURS BANNER ===== -->
+<div class="hours-banner">
+  <div class="hours-banner-left">
+    <div>
+      <div class="hours-banner-label">🕛 We're Open</div>
+      <div class="hours-banner-days">Every day of the week</div>
+    </div>
+    <div class="hours-banner-time">12:00 PM — 3:00 AM</div>
+  </div>
+  <div class="hours-live-status">
+    <span class="hours-live-dot" id="hoursLiveDot"></span>
+    <span id="hoursLiveText">Checking status...</span>
+  </div>
+</div>
+
+<!-- ===== MENU ===== -->
+<section class="section" id="menu">
+  <div class="menu-top">
+    <div>
+      <div class="section-eyebrow">What We Serve</div>
+      <div class="section-title">THE MENU</div>
+    </div>
+    <div class="menu-note">☪ 100% Halal &nbsp;|&nbsp; All burgers &amp; sandwiches<br>served with French fries</div>
+  </div>
+
+  <div class="cat-bar" id="catBar">
+    <button class="cat-btn on" onclick="filterMenu('all',this)">All</button>
+    <button class="cat-btn" onclick="filterMenu('burgers',this)">Burgers</button>
+    <button class="cat-btn" onclick="filterMenu('sandwiches',this)">Sandwiches</button>
+    <button class="cat-btn" onclick="filterMenu('wraps',this)">Wraps</button>
+    <button class="cat-btn" onclick="filterMenu('starters',this)">Starters</button>
+    <button class="cat-btn" onclick="filterMenu('pasta',this)">Pasta</button>
+    <button class="cat-btn" onclick="filterMenu('sweet',this)">Sweet Tooth</button>
+    <button class="cat-btn" onclick="filterMenu('shakes',this)">Shakes</button>
+    <button class="cat-btn" onclick="filterMenu('drinks',this)">Drinks</button>
+  </div>
+
+  <div class="menu-grid" id="menuGrid">
+
+    <!-- BURGERS -->
+    <div class="card on" data-cat="burgers" data-name="OG" data-price="10600" data-emoji="🍔">
+      <span class="card-emoji">🍔</span>
+      <div class="card-name">OG</div>
+      <div class="card-desc">Juicy beef, melted cheddar, iceberg lettuce, tomato, grilled onions, dill pickles and cocktail sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>10,600</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="Lucy" data-price="12750" data-emoji="🍔">
+      <span class="card-emoji">🍔</span>
+      <div class="card-name">Lucy</div>
+      <div class="card-desc">Cheese stuffed patty, beef bacon, crunchy onion rings, iceberg lettuce with dijonaise and ketchup sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>12,750</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="MAD Burger" data-price="15400" data-emoji="🍔">
+      <span class="card-tag">⭐ Signature</span>
+      <span class="card-emoji">🍔</span>
+      <div class="card-name">MAD</div>
+      <div class="card-desc">Juicy beef with breaded cheddar, beef bacon, dill pickles and our house MAD sauce paired with BBQ.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>15,400</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="Cha Cha" data-price="12900" data-emoji="🍔">
+      <span class="card-emoji">🍔</span>
+      <div class="card-name">Cha Cha</div>
+      <div class="card-desc">Juicy beef, cheddar, sauteed mushrooms, grilled tomato and onions, crisp chips and our house MAD sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>12,900</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="Chicken B" data-price="9200" data-emoji="🍗">
+      <span class="card-emoji">🍗</span>
+      <div class="card-name">Chicken B</div>
+      <div class="card-desc">Choice of grilled or crispy chicken, iceberg lettuce, dill pickles, fresh mushroom, tomato with garlic mayo.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>9,200</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="Island" data-price="10800" data-emoji="🍗">
+      <span class="card-emoji">🍗</span>
+      <div class="card-name">Island</div>
+      <div class="card-desc">Crispy chicken, mix cheese, beef pepperoni, iceberg lettuce, dill pickles and thousand island sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>10,800</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="Truffle Rush" data-price="16500" data-emoji="🍔">
+      <span class="card-tag">🌟 Premium</span>
+      <span class="card-emoji">🍔</span>
+      <div class="card-name">Truffle Rush</div>
+      <div class="card-desc">Juicy beef patty with creamy truffle mayo, fresh mushrooms, melted Swiss cheese and fresh rocket leaves.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>16,500</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="Mex" data-price="11900" data-emoji="🌶️">
+      <span class="card-tag">🌶 Spicy</span>
+      <span class="card-emoji">🌶️</span>
+      <div class="card-name">Mex</div>
+      <div class="card-desc">Juicy beef with sauteed bell peppers, mix cheese, iceberg lettuce, avocado slices, jalapeños and Cajun sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>11,900</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="The Afro" data-price="9200" data-emoji="🍔">
+      <span class="card-tag">🔥 Local Fav</span>
+      <span class="card-emoji">🍔</span>
+      <div class="card-name">The Afro</div>
+      <div class="card-desc">Juicy beef with a kick of suya spices, onions, tomato and spicy coleslaw with suya mayo sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>9,200</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="Mozz B" data-price="11500" data-emoji="🧀">
+      <span class="card-emoji">🧀</span>
+      <div class="card-name">Mozz B</div>
+      <div class="card-desc">Crispy breaded mozzarella patty with cocktail sauce, iceberg lettuce, juicy tomato and dill pickles.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>11,500</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="Mighty" data-price="12900" data-emoji="🍗">
+      <span class="card-emoji">🍗</span>
+      <div class="card-name">Mighty</div>
+      <div class="card-desc">Crispy chicken, breaded mozzarella, iceberg lettuce, dill pickles and BBQ mayo sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>12,900</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="Bliss" data-price="10250" data-emoji="🍗">
+      <span class="card-emoji">🍗</span>
+      <div class="card-name">Bliss</div>
+      <div class="card-desc">Crispy chicken, mix cheese, coleslaw mix, dill pickles with ranch mayo sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>10,250</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="Flame" data-price="9700" data-emoji="🔥">
+      <span class="card-tag">🌶 Spicy</span>
+      <span class="card-emoji">🔥</span>
+      <div class="card-name">Flame</div>
+      <div class="card-desc">Crispy chicken, jalapeños, iceberg lettuce and buffalo mayo paired with BBQ sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>9,700</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="Classic Beef" data-price="3000" data-emoji="🍔">
+      <span class="card-emoji">🍔</span>
+      <div class="card-name">Classic Beef</div>
+      <div class="card-desc">Juicy grilled beef patty, fresh onions and ketchup.</div>
+      <div class="card-sub">From the Classics range</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>3,000</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="Classic Chicken" data-price="3200" data-emoji="🍗">
+      <span class="card-emoji">🍗</span>
+      <div class="card-name">Classic Chicken</div>
+      <div class="card-desc">Crispy chicken fillet, creamy mayo and iceberg lettuce.</div>
+      <div class="card-sub">From the Classics range</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>3,200</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="burgers" data-name="Classic Cheese" data-price="3700" data-emoji="🧀">
+      <span class="card-emoji">🧀</span>
+      <div class="card-name">Classic Cheese</div>
+      <div class="card-desc">Juicy grilled beef patty, melted cheese, ketchup and dill pickles.</div>
+      <div class="card-sub">From the Classics range</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>3,700</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <!-- SANDWICHES -->
+    <div class="card on" data-cat="sandwiches" data-name="Fuego" data-price="12000" data-emoji="🥖">
+      <span class="card-emoji">🥖</span>
+      <div class="card-name">Fuego</div>
+      <div class="card-desc">Sauteed fajita chicken with mix bell pepper and onions, mozzarella cheese with guacamole sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>12,000</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="sandwiches" data-name="Steakhouse Classic" data-price="13500" data-emoji="🥩">
+      <span class="card-tag">⭐ Popular</span>
+      <span class="card-emoji">🥩</span>
+      <div class="card-name">Steakhouse Classic</div>
+      <div class="card-desc">Juicy steak slices, sauteed mushrooms, grilled tomato and onions, cheddar cheese and house MAD sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>13,500</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="sandwiches" data-name="Chicken Sub" data-price="11000" data-emoji="🥖">
+      <span class="card-emoji">🥖</span>
+      <div class="card-name">Chicken Sub</div>
+      <div class="card-desc">Grilled chicken, iceberg lettuce, tomato, dill pickles, fresh mushroom with garlic mayo sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>11,000</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <!-- WRAPS -->
+    <div class="card on" data-cat="wraps" data-name="BBQ Crunch" data-price="10200" data-emoji="🌯">
+      <span class="card-emoji">🌯</span>
+      <div class="card-name">BBQ Crunch</div>
+      <div class="card-desc">Crispy chicken in a soft tortilla with BBQ, cheddar, honey mustard and ranch sauce, topped with crispy chips.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>10,200</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="wraps" data-name="Honey Crunch" data-price="10700" data-emoji="🌯">
+      <span class="card-emoji">🌯</span>
+      <div class="card-name">Honey Crunch</div>
+      <div class="card-desc">Crispy chicken with honey mustard and ranch sauce, dill pickles, crispy chips and iceberg lettuce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>10,700</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="wraps" data-name="The Crunch" data-price="11900" data-emoji="🌯">
+      <span class="card-tag">⭐ Bestseller</span>
+      <span class="card-emoji">🌯</span>
+      <div class="card-name">The Crunch</div>
+      <div class="card-desc">Crispy chicken with cocktail sauce, dill pickles, mix cheese, iceberg lettuce and sweet corn.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>11,900</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <!-- STARTERS -->
+    <div class="card on" data-cat="starters" data-name="Flavorful Wings" data-price="7000" data-emoji="🍗">
+      <span class="card-emoji">🍗</span>
+      <div class="card-name">Flavorful Wings</div>
+      <div class="card-desc">Six juicy chicken wings with your choice of BBQ, Buffalo, Naija Pepper or Honey Mustard dip.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>7,000</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="starters" data-name="Golden Tenders" data-price="7600" data-emoji="🍗">
+      <span class="card-emoji">🍗</span>
+      <div class="card-name">Golden Tenders</div>
+      <div class="card-desc">Five pieces of breaded chicken served with honey mustard dip.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>7,600</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="starters" data-name="Mozzarella Bricks" data-price="7900" data-emoji="🧀">
+      <span class="card-emoji">🧀</span>
+      <div class="card-name">Mozzarella Bricks</div>
+      <div class="card-desc">Four pieces of cheesy mozzarella bricks served with cocktail dip.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>7,900</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="starters" data-name="Beef Rolls" data-price="9200" data-emoji="🥩">
+      <span class="card-emoji">🥩</span>
+      <div class="card-name">Beef Rolls</div>
+      <div class="card-desc">Four pieces of stuffed pulled beef with cheese and mixed vegetables, served with BBQ dip.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>9,200</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="starters" data-name="Macon Bites" data-price="8100" data-emoji="🌶️">
+      <span class="card-tag">🌶 Spicy</span>
+      <span class="card-emoji">🌶️</span>
+      <div class="card-name">Macon Bites</div>
+      <div class="card-desc">Four pieces of mix cheese, jalapeño and beef bacon. Served with BBQ dip.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>8,100</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="starters" data-name="Onion Rings" data-price="5400" data-emoji="🧅">
+      <span class="card-emoji">🧅</span>
+      <div class="card-name">Onion Rings</div>
+      <div class="card-desc">Eight golden onion rings served with ranch mayo dip.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>5,400</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="starters" data-name="MAD Sampler" data-price="17500" data-emoji="🍽️">
+      <span class="card-tag">🔥 Best Value</span>
+      <span class="card-emoji">🍽️</span>
+      <div class="card-name">MAD Sampler</div>
+      <div class="card-desc">Wings, onion rings, tenders, beef rolls, mozzarella bricks and French fries. Served with 3 dips.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>17,500</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <!-- PASTA -->
+    <div class="card on" data-cat="pasta" data-name="Beefy Spaghetti" data-price="8000" data-emoji="🍝">
+      <span class="card-tag">🌶 Spicy</span>
+      <span class="card-emoji">🍝</span>
+      <div class="card-name">Beefy Spaghetti</div>
+      <div class="card-desc">Classic spaghetti with spicy tomato beef sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>8,000</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="pasta" data-name="Creamy Chicken Pasta" data-price="9200" data-emoji="🍝">
+      <span class="card-emoji">🍝</span>
+      <div class="card-name">Creamy Chicken</div>
+      <div class="card-desc">Spaghetti in a creamy sauce with sautéed fresh mushrooms and chicken.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>9,200</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="pasta" data-name="Bollywood" data-price="10500" data-emoji="🦐">
+      <span class="card-tag">⭐ Chef's Pick</span>
+      <span class="card-emoji">🦐</span>
+      <div class="card-name">Bollywood</div>
+      <div class="card-desc">Spaghetti in a rich curry sauce with sautéed prawns topped with crushed peanuts.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>10,500</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <!-- SWEET TOOTH -->
+    <div class="card on" data-cat="sweet" data-name="Chocoloco" data-price="8000" data-emoji="🍫">
+      <span class="card-emoji">🍫</span>
+      <div class="card-name">Chocoloco</div>
+      <div class="card-desc">Stuffed with fresh banana and rich Belgian chocolate, then drizzled with smooth chocolate.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>8,000</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="sweet" data-name="Oreo Crush" data-price="9200" data-emoji="🍪">
+      <span class="card-tag">⭐ Fan Fav</span>
+      <span class="card-emoji">🍪</span>
+      <div class="card-name">Oreo Crush</div>
+      <div class="card-desc">Stuffed with crushed Oreos and Belgian milk chocolate, drizzled with smooth Belgian white chocolate.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>9,200</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <div class="card on" data-cat="sweet" data-name="Berry White" data-price="9800" data-emoji="🍓">
+      <span class="card-emoji">🍓</span>
+      <div class="card-name">Berry White</div>
+      <div class="card-desc">Loaded with Belgian white chocolate, topped with fresh strawberries and vibrant strawberry sauce.</div>
+      <div class="card-foot">
+        <span class="card-price"><span class="card-currency">₦</span>9,800</span>
+        <button class="add-btn" onclick="addToCart(this)">+</button>
+      </div>
+    </div>
+
+    <!-- SHAKES -->
+    <div class="card on" data-cat="shakes" data-name="Classic Vanilla Shake" data-price="6000" data-emoji="🥤">
+      <span class="card-emoji">🥤</span><div class="card-name">Classic Vanilla</div>
+      <div class="card-desc">Creamy classic vanilla milkshake.</div>
+      <div class="card-foot"><span class="card-price"><span class="card-currency">₦</span>6,000</span><button class="add-btn" onclick="addToCart(this)">+</button></div>
+    </div>
+    <div class="card on" data-cat="shakes" data-name="Oreo Dream Shake" data-price="6000" data-emoji="🥤">
+      <span class="card-emoji">🥤</span><div class="card-name">Oreo Dream</div>
+      <div class="card-desc">Thick and creamy Oreo milkshake.</div>
+      <div class="card-foot"><span class="card-price"><span class="card-currency">₦</span>6,000</span><button class="add-btn" onclick="addToCart(this)">+</button></div>
+    </div>
+    <div class="card on" data-cat="shakes" data-name="Strawberry Splash Shake" data-price="6000" data-emoji="🍓">
+      <span class="card-emoji">🍓</span><div class="card-name">Strawberry Splash</div>
+      <div class="card-desc">Fresh and fruity strawberry milkshake.</div>
+      <div class="card-foot"><span class="card-price"><span class="card-currency">₦</span>6,000</span><button class="add-btn" onclick="addToCart(this)">+</button></div>
+    </div>
+    <div class="card on" data-cat="shakes" data-name="MAD Chocolate Shake" data-price="6000" data-emoji="🍫">
+      <span class="card-tag">⭐ Popular</span>
+      <span class="card-emoji">🍫</span><div class="card-name">MAD Chocolate</div>
+      <div class="card-desc">Rich and indulgent chocolate milkshake.</div>
+      <div class="card-foot"><span class="card-price"><span class="card-currency">₦</span>6,000</span><button class="add-btn" onclick="addToCart(this)">+</button></div>
+    </div>
+
+    <!-- DRINKS -->
+    <div class="card on" data-cat="drinks" data-name="Soft Drink" data-price="1200" data-emoji="🥤">
+      <span class="card-emoji">🥤</span><div class="card-name">Soft Drink</div>
+      <div class="card-desc">Ask your delivery rider for available options.</div>
+      <div class="card-foot"><span class="card-price"><span class="card-currency">₦</span>1,200</span><button class="add-btn" onclick="addToCart(this)">+</button></div>
+    </div>
+    <div class="card on" data-cat="drinks" data-name="Five Alive" data-price="1200" data-emoji="🍊">
+      <span class="card-emoji">🍊</span><div class="card-name">Five Alive</div>
+      <div class="card-desc">Refreshing Five Alive juice drink.</div>
+      <div class="card-foot"><span class="card-price"><span class="card-currency">₦</span>1,200</span><button class="add-btn" onclick="addToCart(this)">+</button></div>
+    </div>
+    <div class="card on" data-cat="drinks" data-name="Water" data-price="900" data-emoji="💧">
+      <span class="card-emoji">💧</span><div class="card-name">Water</div>
+      <div class="card-desc">Still bottled water.</div>
+      <div class="card-foot"><span class="card-price"><span class="card-currency">₦</span>900</span><button class="add-btn" onclick="addToCart(this)">+</button></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer id="footer">
+  <div class="footer-grid">
+    <div>
+      <span class="f-brand-name">MAD</span>
+      <span class="f-brand-sub">Munchies After Dark</span>
+      <p class="f-brand-desc">Premium quality fast food, top notch service and pocket friendly prices. Est. January 2025. 100% Halal Certified.</p>
+      <div class="f-social">
+        <a class="f-soc-btn" href="https://www.instagram.com/munchiesafterdarkng" target="_blank" title="Instagram">📸</a>
+        <a class="f-soc-btn" href="https://wa.me/2347047792000" target="_blank" title="WhatsApp">💬</a>
+      </div>
+    </div>
+    <div class="f-col">
+      <div class="f-col-title">Hours</div>
+      <p>Open Every Day</p>
+      <p>12:00 PM – 3:00 AM</p>
+    </div>
+    <div class="f-col">
+      <div class="f-col-title">Order</div>
+      <a href="#menu">Order Online</a>
+      <a href="https://wa.me/2347047792000" target="_blank">WhatsApp Us</a>
+      <a href="https://munchies-after-dark.daash.restaurant/1" target="_blank">Daash</a>
+    </div>
+    <div class="f-col">
+      <div class="f-col-title">Connect</div>
+      <a href="https://www.instagram.com/munchiesafterdarkng" target="_blank">@munchiesafterdarkng</a>
+      <a href="https://wa.me/2347047792000" target="_blank">+234 704 779 2000</a>
+      <p>☪ Halal Certified</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Munchies After Dark. All rights reserved.</p>
+    <p>Built with 🍔 in Nigeria</p>
+  </div>
+</footer>
+
+<!-- ===== OVERLAY ===== -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<!-- ===== CART SIDEBAR ===== -->
+<div class="cart-side" id="cartSide">
+  <div class="cs-head">
+    <div class="cs-title">Your Order</div>
+    <button class="cs-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cs-steps">
+    <div class="cs-step active" id="step1label">① Items</div>
+    <div class="cs-step" id="step2label">② Delivery Info</div>
+    <div class="cs-step" id="step3label">③ Payment</div>
+  </div>
+
+  <!-- STEP 1: Items -->
+  <div class="cs-body" id="cartStep1">
+    <div id="cartItems">
+      <div class="empty-cart">
+        <span class="empty-cart-icon">🍔</span>
+        <p>Your order is empty</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Delivery info (hidden initially) -->
+  <div class="cs-body d-form" id="cartStep2">
+    <div style="margin-bottom:20px;">
+      <div class="section-eyebrow" style="font-size:10px;margin-bottom:6px;">Delivery Details</div>
+      <p style="font-size:13px;color:var(--text-dim);font-weight:300;line-height:1.7;">Fill in your details below so we can deliver your order.</p>
+    </div>
+    <div class="f-row">
+      <div class="f-group">
+        <label class="f-label">First Name *</label>
+        <input class="f-input" id="fname" type="text" placeholder="John">
+        <span class="f-error" id="fnameErr">Required</span>
+      </div>
+      <div class="f-group">
+        <label class="f-label">Last Name *</label>
+        <input class="f-input" id="lname" type="text" placeholder="Doe">
+        <span class="f-error" id="lnameErr">Required</span>
+      </div>
+    </div>
+    <div class="f-row">
+      <div class="f-group f-full">
+        <label class="f-label">Phone Number *</label>
+        <input class="f-input" id="fphone" type="tel" placeholder="+234 000 000 0000">
+        <span class="f-error" id="fphoneErr">Required</span>
+      </div>
+    </div>
+    <div class="f-row">
+      <div class="f-group f-full">
+        <label class="f-label">Email (for payment receipt)</label>
+        <input class="f-input" id="femail" type="email" placeholder="john@email.com">
+      </div>
+    </div>
+    <div class="f-row">
+      <div class="f-group f-full">
+        <label class="f-label">Delivery Address *</label>
+        <input class="f-input" id="faddress" type="text" placeholder="Full delivery address">
+        <span class="f-error" id="faddressErr">Required</span>
+      </div>
+    </div>
+    <div class="f-row">
+      <div class="f-group f-full">
+        <label class="f-label">Order Notes (optional)</label>
+        <input class="f-input" id="fnotes" type="text" placeholder="e.g. Extra sauce, no pickles…">
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Payment method (hidden initially) -->
+  <div class="cs-body d-form" id="cartStep3">
+    <div style="margin-bottom:20px;">
+      <div class="section-eyebrow" style="font-size:10px;margin-bottom:6px;">Choose Payment</div>
+      <p style="font-size:13px;color:var(--text-dim);font-weight:300;line-height:1.7;">How would you like to pay?</p>
+    </div>
+    <div class="method-grid">
+      <button class="method-card" id="methodPaystack" onclick="selectMethod('paystack')">
+        <span class="method-icon">💳</span>
+        <div class="method-name">Pay Online</div>
+        <div class="method-desc">Card / Bank Transfer via Paystack</div>
+      </button>
+      <button class="method-card" id="methodWA" onclick="selectMethod('whatsapp')">
+        <span class="method-icon">💬</span>
+        <div class="method-name">WhatsApp</div>
+        <div class="method-desc">Send order, pay on delivery</div>
+      </button>
+    </div>
+    <div id="methodNote" style="font-size:12px;color:var(--text-dim);line-height:1.7;margin-top:12px;min-height:40px;"></div>
+  </div>
+
+  <div class="cs-foot">
+    <div class="price-row"><span>Subtotal</span><span id="subtotal">₦0</span></div>
+    <div class="price-row"><span>Delivery</span><span style="color:#4caf50">To be confirmed</span></div>
+    <div class="grand-row">
+      <span class="grand-lbl">Total</span>
+      <span class="grand-val" id="grandTotal">₦0</span>
+    </div>
+    <!-- Step nav buttons -->
+    <button class="action-btn" id="mainActionBtn" onclick="handleAction()" disabled>View Order Summary →</button>
+    <button class="action-btn" id="backBtn" onclick="goBack()"
+      style="display:none;background:none;border:1px solid rgba(247,231,206,.2);color:var(--cream);margin-top:8px;">
+      ← Back
+    </button>
+  </div>
+</div>
+
+<!-- ===== PAYSTACK MODAL ===== -->
+<div class="pay-modal" id="payModal">
+  <div class="pay-box">
+    <button class="pay-close" onclick="closePayModal()">✕</button>
+    <div class="pay-title">Online Payment</div>
+    <p class="pay-sub">You'll be charged securely via Paystack. Enter your email to receive a receipt.</p>
+    <span class="pay-amount" id="payAmount">₦0</span>
+    <div class="pay-email-wrap">
+      <div class="f-group">
+        <label class="f-label">Email Address *</label>
+        <input class="f-input" id="payEmail" type="email" placeholder="your@email.com">
+        <span class="f-error" id="payEmailErr">Please enter a valid email</span>
+      </div>
+    </div>
+    <button class="action-btn" onclick="initiatePaystack()" style="margin-top:0;">Pay Now with Paystack</button>
+    <p class="pay-note">🔒 Secured by Paystack · Your card details are never stored</p>
+    <p class="pay-note" style="margin-top:8px;color:#e8a200;">
+      ⚠️ Replace <strong>pk_test_REPLACE_WITH_YOUR_PAYSTACK_PUBLIC_KEY</strong> in the code with your live Paystack public key to activate payments.
+    </p>
+  </div>
+</div>
+
+<!-- ===== SUCCESS MODAL ===== -->
+<div class="success-modal" id="successModal">
+  <div class="success-box">
+    <span class="s-icon" id="successIcon">🎉</span>
+    <div class="s-title" id="successTitle">Order Placed!</div>
+    <p class="s-sub" id="successSub">Your order is being prepared. We'll contact you shortly to confirm delivery.</p>
+    <span class="s-id" id="successId">#MAD-0000</span>
+    <p class="s-eta">Estimated delivery: <strong>30–45 minutes</strong></p>
+    <button class="s-close" onclick="closeSuccess()">Back to Menu</button>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ========== CONFIG ========== */
+const WHATSAPP_NUMBER = '2347047792000';
+const PAYSTACK_KEY    = 'pk_test_REPLACE_WITH_YOUR_PAYSTACK_PUBLIC_KEY'; // ← replace this
+
+/* ========== STATE ========== */
+let cart       = {};
+let cartStep   = 1;
+let payMethod  = null;
+
+/* ========== OPEN/CLOSE HOURS ========== */
+function checkHours() {
+  const now     = new Date();
+  const hour    = now.getHours();
+  const min     = now.getMinutes();
+  const nowMins = hour * 60 + min;
+  // Open: 12:00 (720) to 03:00 next day (27*60 = 1620 → wraps via midnight)
+  const open    = 12 * 60;       // 720
+  const close   = 27 * 60;      // 3am = 1620 in 24h+ space
+  const adjMins = nowMins < open ? nowMins + 24 * 60 : nowMins;
+  const isOpen  = adjMins >= open && adjMins < close;
+
+  // Header
+  const dot  = document.getElementById('statusDot');
+  const txt  = document.getElementById('statusText');
+  dot.className = isOpen ? 'dot' : 'dot closed';
+  txt.innerHTML = isOpen
+    ? '<span style="color:var(--cream)">We\'re Open</span> · Until 3AM'
+    : '<span style="color:var(--cream)">Closed</span> · Opens 12PM';
+
+  // Hours banner
+  const hd  = document.getElementById('hoursLiveDot');
+  const ht  = document.getElementById('hoursLiveText');
+  hd.className = isOpen ? 'hours-live-dot' : 'hours-live-dot closed';
+  ht.textContent = isOpen ? 'We\'re open right now!' : 'Currently closed · Opens at 12:00 PM';
+}
+checkHours();
+setInterval(checkHours, 60000);
+
+/* ========== HEADER SCROLL ========== */
+window.addEventListener('scroll', () => {
+  document.getElementById('header').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ========== MENU FILTER ========== */
+function filterMenu(cat, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.card').forEach(c => {
+    c.style.display = (cat === 'all' || c.dataset.cat === cat) ? 'block' : 'none';
+  });
+}
+
+/* ========== CART ========== */
+function addToCart(btn) {
+  const c   = btn.closest('.card');
+  const id  = c.dataset.name;
+  const px  = parseInt(c.dataset.price);
+  const em  = c.dataset.emoji;
+  cart[id]  = cart[id] ? { ...cart[id], qty: cart[id].qty + 1 } : { name: id, price: px, emoji: em, qty: 1 };
+  renderCart();
+  showToast('Added to order!');
+  btn.textContent = '✓';
+  btn.style.cssText = 'background:var(--gold);color:var(--black);';
+  setTimeout(() => { btn.textContent = '+'; btn.style.cssText = ''; }, 700);
+}
+
+function changeQty(id, d) {
+  if (!cart[id]) return;
+  cart[id].qty += d;
+  if (cart[id].qty <= 0) delete cart[id];
+  renderCart();
+}
+
+function cartTotal() {
+  return Object.values(cart).reduce((s, v) => s + v.price * v.qty, 0);
+}
+function cartCount() {
+  return Object.values(cart).reduce((s, v) => s + v.qty, 0);
+}
+
+function renderCart() {
+  const entries = Object.entries(cart);
+  const count   = cartCount();
+  const total   = cartTotal();
+
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('subtotal').textContent  = '₦' + total.toLocaleString();
+  document.getElementById('grandTotal').textContent = '₦' + total.toLocaleString();
+  document.getElementById('mainActionBtn').disabled = count === 0;
+
+  if (entries.length === 0) {
+    document.getElementById('cartItems').innerHTML =
+      `<div class="empty-cart"><span class="empty-cart-icon">🍔</span><p>Your order is empty</p></div>`;
+    return;
+  }
+  document.getElementById('cartItems').innerHTML = entries.map(([id, item]) => `
+    <div class="cart-item">
+      <span class="ci-emoji">${item.emoji}</span>
+      <div class="ci-info">
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-price">₦${(item.price * item.qty).toLocaleString()}</div>
+      </div>
+      <div class="qty-ctrl">
+        <button class="q-btn" onclick="changeQty('${id.replace(/'/g,"\\'")}', -1)">−</button>
+        <span class="q-num">${item.qty}</span>
+        <button class="q-btn" onclick="changeQty('${id.replace(/'/g,"\\'")}', 1)">+</button>
+      </div>
+    </div>`).join('');
+}
+
+function openCart() {
+  document.getElementById('cartSide').classList.add('on');
+  document.getElementById('overlay').classList.add('on');
+}
+function closeCart() {
+  document.getElementById('cartSide').classList.remove('on');
+  document.getElementById('overlay').classList.remove('on');
+}
+
+/* ========== STEP NAVIGATION ========== */
+function setStep(n) {
+  cartStep = n;
+  ['cartStep1','cartStep2','cartStep3'].forEach((id, i) => {
+    document.getElementById(id).style.display = (i + 1 === n) ? 'block' : 'none';
+    document.getElementById(id).classList.toggle('on', i + 1 === n);
+  });
+  document.getElementById('step1label').className = n > 1 ? 'cs-step done' : 'cs-step active';
+  document.getElementById('step2label').className = n === 2 ? 'cs-step active' : (n > 2 ? 'cs-step done' : 'cs-step');
+  document.getElementById('step3label').className = n === 3 ? 'cs-step active' : 'cs-step';
+  document.getElementById('backBtn').style.display = n > 1 ? 'block' : 'none';
+  const labels = ['View Order Summary →', 'Continue to Payment →', 'Place Order'];
+  document.getElementById('mainActionBtn').textContent = labels[n - 1];
+  document.getElementById('mainActionBtn').disabled = n === 3 && !payMethod;
+}
+
+function goBack() { if (cartStep > 1) setStep(cartStep - 1); }
+
+function handleAction() {
+  if (cartStep === 1) { setStep(2); return; }
+  if (cartStep === 2) {
+    if (!validateForm()) return;
+    setStep(3); return;
+  }
+  if (cartStep === 3) {
+    if (!payMethod) { showToast('Choose a payment method'); return; }
+    if (payMethod === 'whatsapp') sendWhatsApp();
+    else openPayModal();
+  }
+}
+
+/* ========== FORM VALIDATION ========== */
+function validateForm() {
+  let ok = true;
+  const req = [
+    ['fname','fnameErr'],['lname','lnameErr'],
+    ['fphone','fphoneErr'],['faddress','faddressErr']
+  ];
+  req.forEach(([fid, eid]) => {
+    const val = document.getElementById(fid).value.trim();
+    const err = document.getElementById(eid);
+    if (!val) { err.style.display = 'block'; ok = false; }
+    else { err.style.display = 'none'; }
+  });
+  if (!ok) showToast('Please fill in all required fields');
+  return ok;
+}
+
+/* ========== PAYMENT METHOD ========== */
+function selectMethod(m) {
+  payMethod = m;
+  document.getElementById('methodPaystack').classList.toggle('sel', m === 'paystack');
+  document.getElementById('methodWA').classList.toggle('sel', m === 'whatsapp');
+  const note = document.getElementById('methodNote');
+  note.textContent = m === 'paystack'
+    ? '💳 You\'ll be taken to a secure Paystack checkout to pay by card or bank transfer.'
+    : '💬 Your order details will be sent to our WhatsApp. Our team will confirm and arrange payment on delivery.';
+  document.getElementById('mainActionBtn').disabled = false;
+}
+
+/* ========== WHATSAPP ORDER ========== */
+function buildOrderMessage() {
+  const items   = Object.values(cart).map(i => `• ${i.name} x${i.qty} — ₦${(i.price*i.qty).toLocaleString()}`).join('\n');
+  const total   = cartTotal();
+  const fname   = document.getElementById('fname').value.trim();
+  const lname   = document.getElementById('lname').value.trim();
+  const phone   = document.getElementById('fphone').value.trim();
+  const address = document.getElementById('faddress').value.trim();
+  const notes   = document.getElementById('fnotes').value.trim();
+  const orderId = '#MAD-' + Math.floor(1000 + Math.random() * 9000);
+
+  return `🍔 *NEW ORDER — Munchies After Dark*\n\n`
+    + `*Order ID:* ${orderId}\n\n`
+    + `*Items:*\n${items}\n\n`
+    + `*Order Total:* ₦${total.toLocaleString()}\n\n`
+    + `*Customer:* ${fname} ${lname}\n`
+    + `*Phone:* ${phone}\n`
+    + `*Address:* ${address}\n`
+    + (notes ? `*Notes:* ${notes}\n` : '')
+    + `\n_Sent via munchiesafterdark.com_`;
+}
+
+function sendWhatsApp() {
+  const msg = encodeURIComponent(buildOrderMessage());
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+  const orderId = '#MAD-' + Math.floor(1000 + Math.random() * 9000);
+  showSuccess(orderId, 'whatsapp');
+  resetOrder();
+  closeCart();
+}
+
+/* ========== PAYSTACK ========== */
+function openPayModal() {
+  const email = document.getElementById('femail').value.trim();
+  if (email) document.getElementById('payEmail').value = email;
+  document.getElementById('payAmount').textContent = '₦' + cartTotal().toLocaleString();
+  document.getElementById('payModal').classList.add('on');
+}
+function closePayModal() {
+  document.getElementById('payModal').classList.remove('on');
+}
+
+function initiatePaystack() {
+  const email = document.getElementById('payEmail').value.trim();
+  const emailErr = document.getElementById('payEmailErr');
+  if (!email || !email.includes('@')) {
+    emailErr.style.display = 'block'; return;
+  }
+  emailErr.style.display = 'none';
+
+  const fname   = document.getElementById('fname').value.trim();
+  const lname   = document.getElementById('lname').value.trim();
+  const orderId = '#MAD-' + Math.floor(1000 + Math.random() * 9000);
+  const total   = cartTotal();
+
+  // Check if Paystack is loaded
+  if (typeof PaystackPop === 'undefined') {
+    showToast('Paystack not loaded. Add your key to activate.');
+    return;
+  }
+
+  const handler = PaystackPop.setup({
+    key: PAYSTACK_KEY,
+    email: email,
+    amount: total * 100, // Paystack uses kobo
+    currency: 'NGN',
+    ref: orderId.replace('#',''),
+    metadata: {
+      custom_fields: [
+        { display_name: 'Customer Name', variable_name: 'customer_name', value: `${fname} ${lname}` },
+        { display_name: 'Delivery Address', variable_name: 'address', value: document.getElementById('faddress').value.trim() },
+        { display_name: 'Order', variable_name: 'order_summary', value: Object.values(cart).map(i=>`${i.name} x${i.qty}`).join(', ') }
+      ]
+    },
+    callback: function(response) {
+      closePayModal();
+      showSuccess(orderId, 'paystack');
+      resetOrder();
+      closeCart();
+    },
+    onClose: function() {
+      showToast('Payment cancelled');
+    }
+  });
+  handler.openIframe();
+}
+
+/* ========== SUCCESS ========== */
+function showSuccess(orderId, method) {
+  document.getElementById('successId').textContent = orderId;
+  if (method === 'whatsapp') {
+    document.getElementById('successIcon').textContent  = '💬';
+    document.getElementById('successTitle').textContent = 'Order Sent!';
+    document.getElementById('successSub').textContent   = 'Your order has been sent to our WhatsApp. Our team will confirm your order and arrange delivery shortly.';
+  } else {
+    document.getElementById('successIcon').textContent  = '🎉';
+    document.getElementById('successTitle').textContent = 'Order Placed!';
+    document.getElementById('successSub').textContent   = 'Payment confirmed! Your order is being prepared. We\'ll contact you to confirm delivery.';
+  }
+  document.getElementById('successModal').classList.add('on');
+}
+function closeSuccess() {
+  document.getElementById('successModal').classList.remove('on');
+}
+
+function resetOrder() {
+  cart = {};
+  payMethod = null;
+  renderCart();
+  setStep(1);
+  ['fname','lname','fphone','femail','faddress','fnotes','payEmail'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('methodPaystack').classList.remove('sel');
+  document.getElementById('methodWA').classList.remove('sel');
+}
+
+/* ========== TOAST ========== */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  setTimeout(() => t.classList.remove('on'), 2400);
+}
+
+/* ========== INIT ========== */
+setStep(1);
+renderCart();
+</script>
+</body>
+</html>
