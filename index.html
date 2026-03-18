@@ -4,13 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MAD — Munchies After Dark</title>
-<meta name="description" content="Premium quality fast food. Top notch service. Pocket friendly prices. Open daily 12PM – 3AM. Order now.">
+<meta name="description" content="Premium quality fast food. Top notch service. Pocket friendly prices. Open daily 12PM – 3AM.">
+<meta property="og:title" content="MAD — Munchies After Dark">
+<meta property="og:description" content="Premium burgers, wraps & more. Open daily 12PM – 3AM.">
+<meta property="og:image" content="images/cover.png">
+<link rel="icon" href="images/logo.png" type="image/png">
 <link rel="stylesheet" href="style.css">
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <style>
 /* ===== HERO ===== */
 .hero {
-  min-height: 94vh; display: grid; grid-template-columns: 54% 46%;
+  min-height: 96vh;
+  display: grid; grid-template-columns: 52% 48%;
   position: relative; overflow: hidden;
 }
 .hero-l {
@@ -22,15 +27,15 @@
   color: var(--gold); font-weight: 600; margin-bottom: 22px;
   display: flex; align-items: center; gap: 14px;
 }
-.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+.hero-eyebrow::before { content:''; display:block; width:28px; height:1px; background:var(--gold); }
 .hero-h1 {
   font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
-  font-size: clamp(72px, 9vw, 134px); line-height: .88;
+  font-size: clamp(72px, 9vw, 130px); line-height: .88;
   text-transform: uppercase; letter-spacing: 1px; color: var(--cream); margin-bottom: 28px;
 }
 .hero-h1 .g  { color: var(--gold); }
 .hero-h1 .o  { -webkit-text-stroke: 2px var(--gold); color: transparent; }
-.hero-desc   { color: var(--dim); font-size: 15px; line-height: 1.8; max-width: 380px; margin-bottom: 18px; font-weight: 300; }
+.hero-desc   { color: var(--dim); font-size: 16px; line-height: 1.8; max-width: 390px; margin-bottom: 18px; font-weight: 300; }
 .hours-chip  {
   display: inline-flex; align-items: center; gap: 8px;
   border: 1px solid var(--border); padding: 8px 16px;
@@ -39,118 +44,203 @@
 }
 .hours-chip span { color: var(--cream); opacity: .55; }
 .hero-ctas   { display: flex; gap: 14px; flex-wrap: wrap; }
+
 .hero-r {
-  position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden;
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
 }
 .hero-r::before {
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 50% 50%, rgba(249,189,63,.16) 0%, transparent 66%);
+  background: radial-gradient(ellipse at 60% 50%, rgba(249,189,63,.12) 0%, transparent 65%);
+  z-index: 1;
 }
-.hero-emoji {
-  font-size: 190px; position: relative; z-index: 2;
-  filter: drop-shadow(0 24px 64px rgba(249,189,63,.28));
-  animation: hfloat 5s ease-in-out infinite;
+.hero-img {
+  position: absolute; inset: 0;
+  background: url('images/mad.png') center/cover no-repeat;
+  filter: brightness(.55);
 }
-@keyframes hfloat { 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-20px) rotate(2.5deg);} }
+.hero-r-content {
+  position: relative; z-index: 2; padding: 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 24px;
+}
+.hero-logo-img {
+  width: 180px; height: 180px; border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(249,189,63,.4);
+  box-shadow: 0 0 60px rgba(249,189,63,.25);
+  animation: pulse-logo 4s ease-in-out infinite;
+}
+@keyframes pulse-logo {
+  0%,100%{box-shadow:0 0 40px rgba(249,189,63,.2);} 50%{box-shadow:0 0 80px rgba(249,189,63,.45);}
+}
 .hero-flag {
-  position: absolute; bottom: 56px; right: 38px; z-index: 3;
   background: var(--gold); color: var(--black);
-  padding: 14px 16px; text-align: center;
+  padding: 12px 22px; text-align: center;
   font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
-  font-size: 11px; letter-spacing: 2px; text-transform: uppercase; line-height: 1.5;
+  font-size: 12px; letter-spacing: 2px; text-transform: uppercase; line-height: 1.5;
 }
 
 /* ===== STATS ===== */
 .stats {
   background: var(--panel); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-  padding: 24px 80px; display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 24px;
+  padding: 22px 80px; display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 20px;
 }
-.stat { text-align: center; }
-.stat-n { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 38px; color: var(--gold); display: block; }
-.stat-l { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--dim); }
-.stat-div { width: 1px; height: 36px; background: var(--border); }
+.stat-n { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 36px; color: var(--gold); display: block; text-align:center; }
+.stat-l { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--dim); text-align:center; }
+.stat-div { width: 1px; height: 32px; background: var(--border); }
+
+/* ===== FEATURED BURGERS ===== */
+.featured { padding: 88px 80px; }
+.feat-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  margin-top: 52px;
+}
+.feat-card {
+  position: relative; overflow: hidden; aspect-ratio: 3/4; cursor: pointer;
+}
+.feat-card img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .5s ease, filter .5s ease;
+  filter: brightness(.7);
+}
+.feat-card:hover img { transform: scale(1.06); filter: brightness(.5); }
+.feat-overlay {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 24px;
+  background: linear-gradient(0deg, rgba(2,2,3,.85) 0%, transparent 60%);
+  transition: background .3s;
+}
+.feat-card:hover .feat-overlay { background: linear-gradient(0deg, rgba(2,2,3,.92) 0%, rgba(2,2,3,.2) 100%); }
+.feat-tag {
+  background: var(--gold); color: var(--black);
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 3px 10px; width: fit-content; margin-bottom: 8px;
+}
+.feat-name {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+  font-size: 28px; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--cream); line-height: 1;
+}
+.feat-price {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+  font-size: 20px; color: var(--gold); margin-top: 4px;
+}
+.feat-btn {
+  margin-top: 12px; background: var(--gold); color: var(--black); border: none;
+  padding: 10px 20px; font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+  font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+  opacity: 0; transform: translateY(10px); transition: all .3s; width: fit-content;
+}
+.feat-card:hover .feat-btn { opacity: 1; transform: translateY(0); }
+.feat-btn:hover { background: var(--cream); }
+
+/* large featured card */
+.feat-card.large { grid-row: span 2; aspect-ratio: auto; }
+
+/* ===== PHOTO GALLERY STRIP ===== */
+.gallery-strip {
+  display: flex; gap: 2px; overflow: hidden; height: 220px;
+}
+.gallery-strip img {
+  flex: 1; min-width: 0; object-fit: cover;
+  filter: brightness(.65) saturate(.9);
+  transition: flex .4s ease, filter .4s ease;
+}
+.gallery-strip img:hover { flex: 3; filter: brightness(.9) saturate(1.1); }
 
 /* ===== CATEGORIES ===== */
-.cats-sec { padding: 88px 80px; }
-.cats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 48px; }
+.cats-sec { padding: 88px 80px; background: var(--panel); }
+.cats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px; }
 .cat-card {
-  background: var(--panel); border: 1px solid var(--border);
-  padding: 32px 24px; text-align: center; position: relative;
-  transition: all .25s; overflow: hidden;
+  position: relative; overflow: hidden; aspect-ratio: 1; cursor: pointer;
+  transition: transform .25s;
 }
-.cat-card::before {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-  background: var(--gold); transform: scaleX(0); transition: transform .25s;
+.cat-card:hover { transform: translateY(-4px); }
+.cat-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.55); transition: transform .4s, filter .4s; }
+.cat-card:hover img { transform: scale(1.07); filter: brightness(.4); }
+.cat-card-body {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; padding: 20px;
+  background: linear-gradient(180deg, transparent 20%, rgba(2,2,3,.7) 100%);
 }
-.cat-card:hover { border-color: var(--border-hi); transform: translateY(-4px); box-shadow: 0 16px 48px rgba(249,189,63,.1); }
-.cat-card:hover::before { transform: scaleX(1); }
-.cat-icon { font-size: 52px; display: block; margin-bottom: 14px; transition: transform .3s; }
-.cat-card:hover .cat-icon { transform: scale(1.15) rotate(-5deg); }
-.cat-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: 2px; text-transform: uppercase; color: var(--cream); margin-bottom: 6px; }
-.cat-count { font-size: 12px; color: var(--dim); letter-spacing: 1px; }
-.cat-link { display: inline-block; margin-top: 16px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); transition: opacity .2s; }
-.cat-link:hover { opacity: .7; }
+.cat-icon-img { width: 52px; height: 52px; object-fit: cover; border-radius: 50%; margin-bottom: 10px; border: 2px solid var(--gold); }
+.cat-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 22px; letter-spacing: 2px; text-transform: uppercase; color: var(--cream); }
+.cat-count { font-size: 11px; color: var(--gold); letter-spacing: 1px; margin-top: 4px; }
+.cat-arrow { font-size: 20px; color: var(--gold); margin-top: 10px; transition: transform .2s; }
+.cat-card:hover .cat-arrow { transform: translateY(3px); }
 
-/* ===== PROMISE ===== */
-.promise-sec { background: var(--panel); padding: 88px 80px; }
-.promise-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-top: 52px; }
-.promise-text .big-q {
+/* ===== PROMISE / ABOUT STRIP ===== */
+.promise-strip {
+  display: grid; grid-template-columns: 1fr 1fr; min-height: 500px;
+}
+.ps-visual {
+  position: relative; overflow: hidden;
+}
+.ps-visual img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.6); }
+.ps-visual-overlay {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 48px;
+  background: linear-gradient(0deg, rgba(2,2,3,.85) 0%, transparent 60%);
+}
+.ps-text {
+  padding: 64px 64px; display: flex; flex-direction: column; justify-content: center;
+  background: var(--panel);
+}
+.ps-text .big-q {
   font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
-  font-size: clamp(48px,6vw,88px); line-height: .9;
-  text-transform: uppercase; color: var(--cream); margin-bottom: 28px;
+  font-size: clamp(42px, 5vw, 72px); text-transform: uppercase; line-height: .9;
+  color: var(--cream); margin-bottom: 24px;
 }
-.promise-text .big-q span { color: var(--gold); }
-.promise-body { font-size: 15px; color: var(--dim); line-height: 1.85; font-weight: 300; margin-bottom: 32px; }
-.promise-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.pillar {
-  border: 1px solid var(--border); padding: 18px;
-  transition: all .2s;
-}
+.ps-text .big-q span { color: var(--gold); }
+.ps-body { font-size: 15px; color: var(--dim); line-height: 1.85; font-weight: 300; margin-bottom: 28px; }
+.ps-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pillar { border: 1px solid var(--border); padding: 16px; transition: all .2s; }
 .pillar:hover { border-color: var(--border-hi); background: var(--gold-glow); }
-.pillar-icon { font-size: 20px; display: block; margin-bottom: 8px; }
-.pillar-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.pillar-icon { font-size: 18px; display: block; margin-bottom: 6px; }
+.pillar-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 3px; }
 .pillar-desc { font-size: 12px; color: var(--dim); line-height: 1.6; }
-.promise-visual { display: flex; align-items: center; justify-content: center; }
-.promise-circle {
-  width: 340px; height: 340px; border-radius: 50%;
-  border: 1px solid var(--border-hi);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 150px; position: relative;
-  animation: spin-slow 22s linear infinite;
-}
-@keyframes spin-slow { from{transform:rotate(0);} to{transform:rotate(360deg);} }
-.promise-inner { animation: spin-slow 22s linear infinite reverse; }
-.promise-ring { position: absolute; inset: -22px; border-radius: 50%; border: 1px dashed rgba(249,189,63,.2); }
 
 /* ===== CTA BANNER ===== */
 .cta-banner {
-  padding: 80px; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
-  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+  min-height: 320px; display: flex; align-items: center;
 }
-.cta-banner h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(40px,5vw,72px); line-height: .9; text-transform: uppercase; }
+.cta-banner-bg {
+  position: absolute; inset: 0;
+  background: url('images/cover.png') center/cover no-repeat;
+  filter: brightness(.3);
+}
+.cta-banner-content {
+  position: relative; z-index: 2;
+  padding: 60px 80px; display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 32px;
+}
+.cta-banner h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(40px,5vw,76px); line-height: .9; text-transform: uppercase; }
 .cta-banner h2 span { color: var(--gold); }
 .cta-banner p { font-size: 14px; color: var(--dim); margin-top: 10px; }
-.cta-banner-btns { display: flex; gap: 14px; flex-shrink: 0; }
+.cta-banner-btns { display: flex; gap: 14px; flex-shrink: 0; flex-wrap: wrap; }
 
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; min-height: auto; }
   .hero-l { padding: 60px 24px 40px; text-align: center; }
   .hero-eyebrow, .hours-chip { justify-content: center; margin-left: auto; margin-right: auto; }
-  .hero-desc { margin-left: auto; margin-right: auto; }
+  .hero-desc { margin: 0 auto 20px; }
   .hero-ctas { justify-content: center; }
-  .hero-r { min-height: 220px; }
-  .hero-flag { right: 12px; bottom: 12px; font-size: 10px; }
-  .stats { padding: 24px; }
-  .cats-sec, .promise-sec { padding: 52px 24px; }
+  .hero-r { min-height: 300px; }
+  .stats { padding: 20px 24px; }
+  .stat-div { display: none; }
+  .featured, .cats-sec { padding: 52px 24px; }
+  .feat-grid { grid-template-columns: 1fr 1fr; }
+  .feat-card.large { grid-row: span 1; aspect-ratio: 3/4; }
   .cats-grid { grid-template-columns: 1fr 1fr; }
-  .promise-grid { grid-template-columns: 1fr; gap: 40px; }
-  .promise-circle { width: 220px; height: 220px; font-size: 90px; }
-  .cta-banner { padding: 52px 24px; grid-template-columns: 1fr; }
-  .cta-banner-btns { flex-wrap: wrap; }
+  .promise-strip { grid-template-columns: 1fr; }
+  .ps-text { padding: 40px 24px; }
+  .cta-banner-content { padding: 44px 24px; flex-direction: column; }
+  .gallery-strip { height: 140px; }
 }
 @media (max-width: 540px) {
-  .cats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-  .stat-div { display: none; }
+  .feat-grid { grid-template-columns: 1fr; }
+  .cats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
 }
 </style>
 </head>
@@ -159,13 +249,14 @@
 <!-- HEADER -->
 <header id="hdr">
   <a class="hdr-logo" href="index.html">
-    <span class="logo-mad">MAD</span>
+    <img src="images/logo.png" alt="MAD" style="width:36px;height:36px;border-radius:50%;object-fit:cover;margin-right:2px;">
+    <span class="logo-mad" style="font-size:24px;">MAD</span>
     <span class="logo-sub">Munchies After Dark</span>
   </a>
   <nav class="hdr-nav">
-    <a href="index.html" id="nav-home" class="active">Home</a>
-    <a href="about.html" id="nav-about">About</a>
-    <a href="menu.html" id="nav-menu">Menu & Order</a>
+    <a href="index.html" class="active">Home</a>
+    <a href="about.html">About</a>
+    <a href="menu.html">Menu & Order</a>
     <span class="halal-chip">☪ Halal</span>
   </nav>
   <div class="hdr-right">
@@ -175,10 +266,9 @@
   </div>
 </header>
 
-<!-- MOBILE NAV -->
 <div class="mob-nav" id="mobNav">
   <button class="mob-x" onclick="closeMobNav()">✕</button>
-  <div class="mob-nav-logo">MAD</div>
+  <img src="images/logo.png" alt="MAD" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-bottom:16px;">
   <a href="index.html" class="active">Home</a>
   <a href="about.html">About</a>
   <a href="menu.html">Menu & Order</a>
@@ -197,8 +287,11 @@
     </div>
   </div>
   <div class="hero-r">
-    <span class="hero-emoji">🍔</span>
-    <div class="hero-flag">All burgers &<br>sandwiches with<br>French fries</div>
+    <div class="hero-img"></div>
+    <div class="hero-r-content">
+      <img class="hero-logo-img" src="images/logo.png" alt="MAD Logo">
+      <div class="hero-flag">All burgers &<br>sandwiches served<br>with French fries</div>
+    </div>
   </div>
 </section>
 
@@ -218,13 +311,82 @@
 
 <!-- STATS -->
 <div class="stats">
-  <div class="stat"><span class="stat-n">30+</span><span class="stat-l">Menu Items</span></div>
+  <div><span class="stat-n">30+</span><span class="stat-l">Menu Items</span></div>
   <div class="stat-div"></div>
-  <div class="stat"><span class="stat-n">4.9★</span><span class="stat-l">Customer Rating</span></div>
+  <div><span class="stat-n">4.9★</span><span class="stat-l">Customer Rating</span></div>
   <div class="stat-div"></div>
-  <div class="stat"><span class="stat-n">15H</span><span class="stat-l">Daily Hours</span></div>
+  <div><span class="stat-n">15H</span><span class="stat-l">Open Daily</span></div>
   <div class="stat-div"></div>
-  <div class="stat"><span class="stat-n">100%</span><span class="stat-l">Halal Certified</span></div>
+  <div><span class="stat-n">100%</span><span class="stat-l">Halal Certified</span></div>
+</div>
+
+<!-- FEATURED BURGERS -->
+<section class="featured">
+  <div class="eyebrow">Our Signatures</div>
+  <div class="sec-title" style="font-size:64px;">MUST-TRY BURGERS</div>
+  <div class="feat-grid">
+
+    <div class="feat-card large">
+      <img src="images/mad.png" alt="MAD Burger">
+      <div class="feat-overlay">
+        <span class="feat-tag">⭐ Signature</span>
+        <div class="feat-name">The MAD</div>
+        <div class="feat-price">₦15,400</div>
+        <button class="feat-btn" onclick="addItem('MAD Burger',15400,'🍔');showToast('MAD Burger added!')">Add to Order +</button>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <img src="images/truffle.jpg" alt="Truffle Rush">
+      <div class="feat-overlay">
+        <span class="feat-tag">🌟 Premium</span>
+        <div class="feat-name">Truffle Rush</div>
+        <div class="feat-price">₦16,500</div>
+        <button class="feat-btn" onclick="addItem('Truffle Rush',16500,'🍔');showToast('Truffle Rush added!')">Add to Order +</button>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <img src="images/lucy.png" alt="Lucy">
+      <div class="feat-overlay">
+        <div class="feat-name">Lucy</div>
+        <div class="feat-price">₦12,750</div>
+        <button class="feat-btn" onclick="addItem('Lucy',12750,'🍔');showToast('Lucy added!')">Add to Order +</button>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <img src="images/mex.jpg" alt="Mex">
+      <div class="feat-overlay">
+        <span class="feat-tag">🌶 Spicy</span>
+        <div class="feat-name">Mex</div>
+        <div class="feat-price">₦11,900</div>
+        <button class="feat-btn" onclick="addItem('Mex',11900,'🌶️');showToast('Mex added!')">Add to Order +</button>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <img src="images/afro.png" alt="The Afro">
+      <div class="feat-overlay">
+        <span class="feat-tag">🔥 Local Fav</span>
+        <div class="feat-name">The Afro</div>
+        <div class="feat-price">₦9,200</div>
+        <button class="feat-btn" onclick="addItem('The Afro',9200,'🍔');showToast('The Afro added!')">Add to Order +</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GALLERY STRIP -->
+<div class="gallery-strip">
+  <img src="images/og.jpg" alt="OG Burger">
+  <img src="images/chacha.png" alt="Cha Cha">
+  <img src="images/bliss.png" alt="Bliss">
+  <img src="images/flame.png" alt="Flame">
+  <img src="images/wrap1.jpg" alt="Wrap">
+  <img src="images/bollywood.jpg" alt="Bollywood">
+  <img src="images/oreocrush.jpg" alt="Oreo Crush">
 </div>
 
 <!-- CATEGORIES -->
@@ -232,89 +394,109 @@
   <div class="eyebrow">Explore the Menu</div>
   <div class="sec-title" style="font-size:64px;">WHAT WE SERVE</div>
   <div class="cats-grid">
-    <div class="cat-card">
-      <span class="cat-icon">🍔</span>
-      <div class="cat-name">Burgers</div>
-      <div class="cat-count">14 items including classics</div>
-      <a class="cat-link" href="menu.html?cat=burgers">Order →</a>
-    </div>
-    <div class="cat-card">
-      <span class="cat-icon">🌯</span>
-      <div class="cat-name">Wraps</div>
-      <div class="cat-count">3 signature wraps</div>
-      <a class="cat-link" href="menu.html?cat=wraps">Order →</a>
-    </div>
-    <div class="cat-card">
-      <span class="cat-icon">🥖</span>
-      <div class="cat-name">Sandwiches</div>
-      <div class="cat-count">3 loaded subs</div>
-      <a class="cat-link" href="menu.html?cat=sandwiches">Order →</a>
-    </div>
-    <div class="cat-card">
-      <span class="cat-icon">🍗</span>
-      <div class="cat-name">Starters</div>
-      <div class="cat-count">7 sharing starters</div>
-      <a class="cat-link" href="menu.html?cat=starters">Order →</a>
-    </div>
-    <div class="cat-card">
-      <span class="cat-icon">🍝</span>
-      <div class="cat-name">Pasta</div>
-      <div class="cat-count">3 pasta dishes</div>
-      <a class="cat-link" href="menu.html?cat=pasta">Order →</a>
-    </div>
-    <div class="cat-card">
-      <span class="cat-icon">🍫</span>
-      <div class="cat-name">Sweet Tooth</div>
-      <div class="cat-count">3 indulgent desserts</div>
-      <a class="cat-link" href="menu.html?cat=sweet">Order →</a>
-    </div>
-    <div class="cat-card">
-      <span class="cat-icon">🥤</span>
-      <div class="cat-name">Shakes</div>
-      <div class="cat-count">4 milkshakes</div>
-      <a class="cat-link" href="menu.html?cat=shakes">Order →</a>
-    </div>
-    <div class="cat-card">
-      <span class="cat-icon">🍊</span>
-      <div class="cat-name">Drinks</div>
-      <div class="cat-count">Sodas, juice & water</div>
-      <a class="cat-link" href="menu.html?cat=drinks">Order →</a>
-    </div>
+    <a class="cat-card" href="menu.html?cat=burgers">
+      <img src="images/mad.png" alt="Burgers">
+      <div class="cat-card-body">
+        <div class="cat-name">Burgers</div>
+        <div class="cat-count">14 items</div>
+        <div class="cat-arrow">↓</div>
+      </div>
+    </a>
+    <a class="cat-card" href="menu.html?cat=wraps">
+      <img src="images/wrap2.jpg" alt="Wraps">
+      <div class="cat-card-body">
+        <div class="cat-name">Wraps</div>
+        <div class="cat-count">3 wraps</div>
+        <div class="cat-arrow">↓</div>
+      </div>
+    </a>
+    <a class="cat-card" href="menu.html?cat=starters">
+      <img src="images/island2.jpg" alt="Starters">
+      <div class="cat-card-body">
+        <div class="cat-name">Starters</div>
+        <div class="cat-count">7 items</div>
+        <div class="cat-arrow">↓</div>
+      </div>
+    </a>
+    <a class="cat-card" href="menu.html?cat=pasta">
+      <img src="images/bollywood.jpg" alt="Pasta">
+      <div class="cat-card-body">
+        <div class="cat-name">Pasta</div>
+        <div class="cat-count">3 dishes</div>
+        <div class="cat-arrow">↓</div>
+      </div>
+    </a>
+    <a class="cat-card" href="menu.html?cat=sweet">
+      <img src="images/oreocrush.jpg" alt="Sweet Tooth">
+      <div class="cat-card-body">
+        <div class="cat-name">Sweet Tooth</div>
+        <div class="cat-count">3 desserts</div>
+        <div class="cat-arrow">↓</div>
+      </div>
+    </a>
+    <a class="cat-card" href="menu.html?cat=sweet">
+      <img src="images/berrywhite.jpg" alt="Berry White">
+      <div class="cat-card-body">
+        <div class="cat-name">Berry White</div>
+        <div class="cat-count">Sweet Tooth</div>
+        <div class="cat-arrow">↓</div>
+      </div>
+    </a>
+    <a class="cat-card" href="menu.html?cat=sandwiches">
+      <img src="images/island2.jpg" alt="Sandwiches">
+      <div class="cat-card-body">
+        <div class="cat-name">Sandwiches</div>
+        <div class="cat-count">3 subs</div>
+        <div class="cat-arrow">↓</div>
+      </div>
+    </a>
+    <a class="cat-card" href="menu.html">
+      <img src="images/chocoloco.jpg" alt="Chocoloco">
+      <div class="cat-card-body">
+        <div class="cat-name">Chocoloco</div>
+        <div class="cat-count">Sweet Tooth</div>
+        <div class="cat-arrow">↓</div>
+      </div>
+    </a>
   </div>
 </section>
 
-<!-- PROMISE -->
-<section class="promise-sec">
-  <div class="eyebrow">The MAD Promise</div>
-  <div class="promise-grid">
-    <div class="promise-text">
-      <div class="big-q">WE DON'T<br>CUT <span>CORNERS.</span></div>
-      <p class="promise-body">Every item on our menu is crafted with the freshest ingredients, bold flavours and 100% Halal standards. We started MAD in January 2025 with one simple goal — to give you premium fast food at a price that makes sense.</p>
-      <div class="promise-pillars">
-        <div class="pillar"><span class="pillar-icon">⭐</span><div class="pillar-name">Premium Quality</div><div class="pillar-desc">Fresh ingredients, no shortcuts.</div></div>
-        <div class="pillar"><span class="pillar-icon">🤝</span><div class="pillar-name">Top Service</div><div class="pillar-desc">Every order handled with care.</div></div>
-        <div class="pillar"><span class="pillar-icon">💛</span><div class="pillar-name">Pocket Friendly</div><div class="pillar-desc">Great food at fair prices.</div></div>
-        <div class="pillar"><span class="pillar-icon">☪</span><div class="pillar-name">100% Halal</div><div class="pillar-desc">Certified — order with confidence.</div></div>
-      </div>
-    </div>
-    <div class="promise-visual">
-      <div class="promise-circle">
-        <span class="promise-inner">🍔</span>
-        <div class="promise-ring"></div>
+<!-- PROMISE STRIP -->
+<div class="promise-strip">
+  <div class="ps-visual">
+    <img src="images/lucy.png" alt="Lucy Burger">
+    <div class="ps-visual-overlay">
+      <div class="eyebrow" style="margin-bottom:8px;">Est. January 2025</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:48px;text-transform:uppercase;line-height:.9;color:var(--cream);">
+        CLOUD KITCHEN<br><span style="color:var(--gold)">LAGOS</span>
       </div>
     </div>
   </div>
-</section>
+  <div class="ps-text">
+    <div class="eyebrow">The MAD Promise</div>
+    <div class="big-q">WE DON'T<br>CUT <span>CORNERS.</span></div>
+    <p class="ps-body">Every item on our menu is crafted with the freshest ingredients, bold flavours and 100% Halal standards. Premium quality, top notch service and pocket friendly prices — every single time.</p>
+    <div class="ps-pillars">
+      <div class="pillar"><span class="pillar-icon">⭐</span><div class="pillar-name">Premium Quality</div><div class="pillar-desc">Fresh ingredients, no shortcuts.</div></div>
+      <div class="pillar"><span class="pillar-icon">🤝</span><div class="pillar-name">Top Service</div><div class="pillar-desc">Every order handled with care.</div></div>
+      <div class="pillar"><span class="pillar-icon">💛</span><div class="pillar-name">Pocket Friendly</div><div class="pillar-desc">Great food at fair prices.</div></div>
+      <div class="pillar"><span class="pillar-icon">☪</span><div class="pillar-name">100% Halal</div><div class="pillar-desc">Certified — order with confidence.</div></div>
+    </div>
+  </div>
+</div>
 
 <!-- CTA BANNER -->
 <div class="cta-banner">
-  <div>
-    <h2>READY TO <span>ORDER?</span></h2>
-    <p>Open daily from 12:00 PM to 3:00 AM · Delivery to your door</p>
-  </div>
-  <div class="cta-banner-btns">
-    <a class="btn-gold" href="menu.html">View Full Menu</a>
-    <a class="btn-outline" href="https://wa.me/2347047792000" target="_blank">WhatsApp Us</a>
+  <div class="cta-banner-bg"></div>
+  <div class="cta-banner-content">
+    <div>
+      <h2>READY TO <span>ORDER?</span></h2>
+      <p>Open daily 12:00 PM – 3:00 AM · Delivered to your door</p>
+    </div>
+    <div class="cta-banner-btns">
+      <a class="btn-gold" href="menu.html">View Full Menu</a>
+      <a class="btn-outline" href="https://wa.me/2347047792000" target="_blank">WhatsApp Us</a>
+    </div>
   </div>
 </div>
 
@@ -322,7 +504,7 @@
 <footer>
   <div class="footer-grid">
     <div>
-      <span class="fg-logo">MAD</span>
+      <img src="images/logo.png" alt="MAD" style="width:56px;height:56px;border-radius:50%;object-fit:cover;margin-bottom:12px;">
       <span class="fg-sub">Munchies After Dark</span>
       <p class="fg-desc">Premium quality fast food, top notch service, pocket friendly prices. Est. January 2025. 100% Halal Certified.</p>
       <div class="fg-socials">
@@ -332,26 +514,16 @@
     </div>
     <div class="fc"><div class="fc-title">Hours</div><p>Open Every Day</p><p>12:00 PM – 3:00 AM</p></div>
     <div class="fc"><div class="fc-title">Order</div><a href="menu.html">Order Online</a><a href="https://wa.me/2347047792000" target="_blank">WhatsApp Us</a><a href="https://munchies-after-dark.daash.restaurant/1" target="_blank">Daash</a></div>
-    <div class="fc"><div class="fc-title">Connect</div><a href="https://www.instagram.com/munchiesafterdarkng" target="_blank">@munchiesafterdarkng</a><a href="https://wa.me/2347047792000" target="_blank">+234 704 779 2000</a><p>☪ 100% Halal Certified</p></div>
+    <div class="fc"><div class="fc-title">Connect</div><a href="https://www.instagram.com/munchiesafterdarkng" target="_blank">@munchiesafterdarkng</a><a href="https://wa.me/2347047792000" target="_blank">+234 704 779 2000</a><p>☪ 100% Halal</p></div>
   </div>
-  <div class="footer-btm">
-    <p>© 2025 Munchies After Dark. All rights reserved.</p>
-    <p>Built with 🍔 in Nigeria</p>
-  </div>
+  <div class="footer-btm"><p>© 2025 Munchies After Dark. All rights reserved.</p><p>Built with 🍔 in Nigeria</p></div>
 </footer>
 
-<!-- SHARED COMPONENTS -->
+<!-- OVERLAYS & CART -->
 <div class="overlay" id="overlay"></div>
-<div class="mob-nav" id="mobNav" style="display:none"></div>
-
-<!-- CART SIDEBAR -->
 <div class="cart-side" id="cartSide">
   <div class="cs-hd"><div class="cs-title">Your Order</div><button class="cs-x" onclick="closeCart()">✕</button></div>
-  <div class="cs-steps">
-    <div class="cs-step active" id="cs-s1">① Cart</div>
-    <div class="cs-step" id="cs-s2">② Details</div>
-    <div class="cs-step" id="cs-s3">③ Payment</div>
-  </div>
+  <div class="cs-steps"><div class="cs-step active" id="cs-s1">① Cart</div><div class="cs-step" id="cs-s2">② Details</div><div class="cs-step" id="cs-s3">③ Payment</div></div>
   <div class="cs-body" id="csStep1"><div id="cartItemsBody"><div class="empty-state"><span class="empty-icon">🍔</span><p>Your order is empty</p></div></div></div>
   <div class="cs-body d-form" id="csStep2">
     <p style="font-size:13px;color:var(--dim);font-weight:300;line-height:1.7;margin-bottom:18px;">Fill in your delivery details.</p>
@@ -363,10 +535,7 @@
   </div>
   <div class="cs-body d-form" id="csStep3">
     <p style="font-size:13px;color:var(--dim);font-weight:300;line-height:1.7;margin-bottom:16px;">How would you like to pay?</p>
-    <div class="method-grid">
-      <button class="method-card" id="mcPaystack" onclick="selectMethod('paystack')"><span class="mc-icon">💳</span><div class="mc-name">Pay Online</div><div class="mc-desc">Card / Bank Transfer</div></button>
-      <button class="method-card" id="mcWA" onclick="selectMethod('whatsapp')"><span class="mc-icon">💬</span><div class="mc-name">WhatsApp</div><div class="mc-desc">Pay on delivery</div></button>
-    </div>
+    <div class="method-grid"><button class="method-card" id="mcPaystack" onclick="selectMethod('paystack')"><span class="mc-icon">💳</span><div class="mc-name">Pay Online</div><div class="mc-desc">Card / Bank Transfer</div></button><button class="method-card" id="mcWA" onclick="selectMethod('whatsapp')"><span class="mc-icon">💬</span><div class="mc-name">WhatsApp</div><div class="mc-desc">Pay on delivery</div></button></div>
     <p id="methodNote" style="font-size:12px;color:var(--dim);line-height:1.7;margin-top:10px;min-height:36px;"></p>
   </div>
   <div class="cs-ft">
@@ -377,32 +546,8 @@
     <button class="back-btn" id="csBack" onclick="csGoBack()">← Back</button>
   </div>
 </div>
-
-<!-- PAY MODAL -->
-<div class="pay-modal" id="payModal">
-  <div class="pay-box">
-    <button class="pay-x" onclick="closePayModal()">✕</button>
-    <div class="pay-title">Online Payment</div>
-    <p class="pay-sub">Secure checkout via Paystack.</p>
-    <span class="pay-amount" id="payAmount">₦0</span>
-    <div class="fg" style="margin-bottom:14px;"><label class="fl">Email *</label><input class="fi" id="payEmail" type="email" placeholder="your@email.com"><span class="ferr" id="payEmailErr">Enter a valid email</span></div>
-    <button class="act-btn" onclick="doPaystack()" style="margin-top:0;">Pay with Paystack</button>
-    <p class="pay-note">🔒 Secured by Paystack</p>
-    <p class="pay-warn">⚠️ Replace the Paystack key in app.js to activate payments.</p>
-  </div>
-</div>
-
-<!-- SUCCESS -->
-<div class="suc-modal" id="sucModal">
-  <div class="suc-box">
-    <span class="suc-icon" id="sucIcon">🎉</span>
-    <div class="suc-title" id="sucTitle">Order Placed!</div>
-    <p class="suc-sub" id="sucSub">Your order is confirmed!</p>
-    <span class="suc-id" id="sucId">#MAD-0000</span>
-    <p class="suc-eta">Estimated delivery: <strong>30–45 minutes</strong></p>
-    <button class="suc-close" onclick="closeSuc()">Back to Menu</button>
-  </div>
-</div>
+<div class="pay-modal" id="payModal"><div class="pay-box"><button class="pay-x" onclick="closePayModal()">✕</button><div class="pay-title">Online Payment</div><p class="pay-sub">Secure checkout via Paystack.</p><span class="pay-amount" id="payAmount">₦0</span><div class="fg" style="margin-bottom:14px;"><label class="fl">Email *</label><input class="fi" id="payEmail" type="email" placeholder="your@email.com"><span class="ferr" id="payEmailErr">Enter a valid email</span></div><button class="act-btn" onclick="doPaystack()" style="margin-top:0;">Pay with Paystack</button><p class="pay-note">🔒 Secured by Paystack</p><p class="pay-warn">⚠️ Replace Paystack key in app.js to activate.</p></div></div>
+<div class="suc-modal" id="sucModal"><div class="suc-box"><span class="suc-icon" id="sucIcon">🎉</span><div class="suc-title" id="sucTitle">Order Placed!</div><p class="suc-sub" id="sucSub">Your order is confirmed!</p><span class="suc-id" id="sucId">#MAD-0000</span><p class="suc-eta">Estimated delivery: <strong>30–45 minutes</strong></p><button class="suc-close" onclick="closeSuc()">Back to Menu</button></div></div>
 <div class="toast" id="toast"></div>
 
 <script src="app.js"></script>
