@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAD — Munchies After Dark</title>
+<meta name="description" content="Premium quality fast food. Top notch service. Pocket friendly prices. Open daily 12PM – 3AM. Order now.">
+<link rel="stylesheet" href="style.css">
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<style>
+/* ===== HERO ===== */
+.hero {
+  min-height: 94vh; display: grid; grid-template-columns: 54% 46%;
+  position: relative; overflow: hidden;
+}
+.hero-l {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 60px 80px 80px; position: relative; z-index: 2;
+}
+.hero-eyebrow {
+  font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
+  color: var(--gold); font-weight: 600; margin-bottom: 22px;
+  display: flex; align-items: center; gap: 14px;
+}
+.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+.hero-h1 {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+  font-size: clamp(72px, 9vw, 134px); line-height: .88;
+  text-transform: uppercase; letter-spacing: 1px; color: var(--cream); margin-bottom: 28px;
+}
+.hero-h1 .g  { color: var(--gold); }
+.hero-h1 .o  { -webkit-text-stroke: 2px var(--gold); color: transparent; }
+.hero-desc   { color: var(--dim); font-size: 15px; line-height: 1.8; max-width: 380px; margin-bottom: 18px; font-weight: 300; }
+.hours-chip  {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--border); padding: 8px 16px;
+  font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 38px; width: fit-content;
+}
+.hours-chip span { color: var(--cream); opacity: .55; }
+.hero-ctas   { display: flex; gap: 14px; flex-wrap: wrap; }
+.hero-r {
+  position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.hero-r::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(249,189,63,.16) 0%, transparent 66%);
+}
+.hero-emoji {
+  font-size: 190px; position: relative; z-index: 2;
+  filter: drop-shadow(0 24px 64px rgba(249,189,63,.28));
+  animation: hfloat 5s ease-in-out infinite;
+}
+@keyframes hfloat { 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-20px) rotate(2.5deg);} }
+.hero-flag {
+  position: absolute; bottom: 56px; right: 38px; z-index: 3;
+  background: var(--gold); color: var(--black);
+  padding: 14px 16px; text-align: center;
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase; line-height: 1.5;
+}
+
+/* ===== STATS ===== */
+.stats {
+  background: var(--panel); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  padding: 24px 80px; display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 24px;
+}
+.stat { text-align: center; }
+.stat-n { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 38px; color: var(--gold); display: block; }
+.stat-l { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--dim); }
+.stat-div { width: 1px; height: 36px; background: var(--border); }
+
+/* ===== CATEGORIES ===== */
+.cats-sec { padding: 88px 80px; }
+.cats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 48px; }
+.cat-card {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 32px 24px; text-align: center; position: relative;
+  transition: all .25s; overflow: hidden;
+}
+.cat-card::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: var(--gold); transform: scaleX(0); transition: transform .25s;
+}
+.cat-card:hover { border-color: var(--border-hi); transform: translateY(-4px); box-shadow: 0 16px 48px rgba(249,189,63,.1); }
+.cat-card:hover::before { transform: scaleX(1); }
+.cat-icon { font-size: 52px; display: block; margin-bottom: 14px; transition: transform .3s; }
+.cat-card:hover .cat-icon { transform: scale(1.15) rotate(-5deg); }
+.cat-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: 2px; text-transform: uppercase; color: var(--cream); margin-bottom: 6px; }
+.cat-count { font-size: 12px; color: var(--dim); letter-spacing: 1px; }
+.cat-link { display: inline-block; margin-top: 16px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); transition: opacity .2s; }
+.cat-link:hover { opacity: .7; }
+
+/* ===== PROMISE ===== */
+.promise-sec { background: var(--panel); padding: 88px 80px; }
+.promise-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-top: 52px; }
+.promise-text .big-q {
+  font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+  font-size: clamp(48px,6vw,88px); line-height: .9;
+  text-transform: uppercase; color: var(--cream); margin-bottom: 28px;
+}
+.promise-text .big-q span { color: var(--gold); }
+.promise-body { font-size: 15px; color: var(--dim); line-height: 1.85; font-weight: 300; margin-bottom: 32px; }
+.promise-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.pillar {
+  border: 1px solid var(--border); padding: 18px;
+  transition: all .2s;
+}
+.pillar:hover { border-color: var(--border-hi); background: var(--gold-glow); }
+.pillar-icon { font-size: 20px; display: block; margin-bottom: 8px; }
+.pillar-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.pillar-desc { font-size: 12px; color: var(--dim); line-height: 1.6; }
+.promise-visual { display: flex; align-items: center; justify-content: center; }
+.promise-circle {
+  width: 340px; height: 340px; border-radius: 50%;
+  border: 1px solid var(--border-hi);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 150px; position: relative;
+  animation: spin-slow 22s linear infinite;
+}
+@keyframes spin-slow { from{transform:rotate(0);} to{transform:rotate(360deg);} }
+.promise-inner { animation: spin-slow 22s linear infinite reverse; }
+.promise-ring { position: absolute; inset: -22px; border-radius: 50%; border: 1px dashed rgba(249,189,63,.2); }
+
+/* ===== CTA BANNER ===== */
+.cta-banner {
+  padding: 80px; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.cta-banner h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(40px,5vw,72px); line-height: .9; text-transform: uppercase; }
+.cta-banner h2 span { color: var(--gold); }
+.cta-banner p { font-size: 14px; color: var(--dim); margin-top: 10px; }
+.cta-banner-btns { display: flex; gap: 14px; flex-shrink: 0; }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-l { padding: 60px 24px 40px; text-align: center; }
+  .hero-eyebrow, .hours-chip { justify-content: center; margin-left: auto; margin-right: auto; }
+  .hero-desc { margin-left: auto; margin-right: auto; }
+  .hero-ctas { justify-content: center; }
+  .hero-r { min-height: 220px; }
+  .hero-flag { right: 12px; bottom: 12px; font-size: 10px; }
+  .stats { padding: 24px; }
+  .cats-sec, .promise-sec { padding: 52px 24px; }
+  .cats-grid { grid-template-columns: 1fr 1fr; }
+  .promise-grid { grid-template-columns: 1fr; gap: 40px; }
+  .promise-circle { width: 220px; height: 220px; font-size: 90px; }
+  .cta-banner { padding: 52px 24px; grid-template-columns: 1fr; }
+  .cta-banner-btns { flex-wrap: wrap; }
+}
+@media (max-width: 540px) {
+  .cats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat-div { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="hdr">
+  <a class="hdr-logo" href="index.html">
+    <span class="logo-mad">MAD</span>
+    <span class="logo-sub">Munchies After Dark</span>
+  </a>
+  <nav class="hdr-nav">
+    <a href="index.html" id="nav-home" class="active">Home</a>
+    <a href="about.html" id="nav-about">About</a>
+    <a href="menu.html" id="nav-menu">Menu & Order</a>
+    <span class="halal-chip">☪ Halal</span>
+  </nav>
+  <div class="hdr-right">
+    <div class="status-badge"><span class="sdot" id="sdot"></span><span class="stext" id="stxt"></span></div>
+    <button class="cart-pill" onclick="openCart()">🛒 Order <span class="cart-num" id="cartCount">0</span></button>
+    <button class="hamburger" onclick="openMobNav()">☰</button>
+  </div>
+</header>
+
+<!-- MOBILE NAV -->
+<div class="mob-nav" id="mobNav">
+  <button class="mob-x" onclick="closeMobNav()">✕</button>
+  <div class="mob-nav-logo">MAD</div>
+  <a href="index.html" class="active">Home</a>
+  <a href="about.html">About</a>
+  <a href="menu.html">Menu & Order</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-l">
+    <div class="hero-eyebrow">Cloud Kitchen · Est. Jan 2025 · 100% Halal</div>
+    <h1 class="hero-h1">MUNCHIES<br><span class="g">AFTER</span><br><span class="o">DARK.</span></h1>
+    <p class="hero-desc">Premium quality fast food with top notch service and pocket friendly prices. Fresh every order, delivered to your door.</p>
+    <div class="hours-chip">🕛 Open Daily <span>&nbsp;12:00 PM — 3:00 AM</span></div>
+    <div class="hero-ctas">
+      <a class="btn-gold" href="menu.html">Order Now</a>
+      <a class="btn-outline" href="about.html">Our Story</a>
+    </div>
+  </div>
+  <div class="hero-r">
+    <span class="hero-emoji">🍔</span>
+    <div class="hero-flag">All burgers &<br>sandwiches with<br>French fries</div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="tick">Munchies After Dark</span><span class="tick">100% Halal Certified</span>
+    <span class="tick">Burgers · Wraps · Pasta · Desserts</span><span class="tick">Open Daily 12PM – 3AM</span>
+    <span class="tick">Premium Quality</span><span class="tick">Pocket Friendly Prices</span>
+    <span class="tick">Est. January 2025</span><span class="tick">Cloud Kitchen Lagos</span>
+    <span class="tick">Munchies After Dark</span><span class="tick">100% Halal Certified</span>
+    <span class="tick">Burgers · Wraps · Pasta · Desserts</span><span class="tick">Open Daily 12PM – 3AM</span>
+    <span class="tick">Premium Quality</span><span class="tick">Pocket Friendly Prices</span>
+    <span class="tick">Est. January 2025</span><span class="tick">Cloud Kitchen Lagos</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><span class="stat-n">30+</span><span class="stat-l">Menu Items</span></div>
+  <div class="stat-div"></div>
+  <div class="stat"><span class="stat-n">4.9★</span><span class="stat-l">Customer Rating</span></div>
+  <div class="stat-div"></div>
+  <div class="stat"><span class="stat-n">15H</span><span class="stat-l">Daily Hours</span></div>
+  <div class="stat-div"></div>
+  <div class="stat"><span class="stat-n">100%</span><span class="stat-l">Halal Certified</span></div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="cats-sec">
+  <div class="eyebrow">Explore the Menu</div>
+  <div class="sec-title" style="font-size:64px;">WHAT WE SERVE</div>
+  <div class="cats-grid">
+    <div class="cat-card">
+      <span class="cat-icon">🍔</span>
+      <div class="cat-name">Burgers</div>
+      <div class="cat-count">14 items including classics</div>
+      <a class="cat-link" href="menu.html?cat=burgers">Order →</a>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">🌯</span>
+      <div class="cat-name">Wraps</div>
+      <div class="cat-count">3 signature wraps</div>
+      <a class="cat-link" href="menu.html?cat=wraps">Order →</a>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">🥖</span>
+      <div class="cat-name">Sandwiches</div>
+      <div class="cat-count">3 loaded subs</div>
+      <a class="cat-link" href="menu.html?cat=sandwiches">Order →</a>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">🍗</span>
+      <div class="cat-name">Starters</div>
+      <div class="cat-count">7 sharing starters</div>
+      <a class="cat-link" href="menu.html?cat=starters">Order →</a>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">🍝</span>
+      <div class="cat-name">Pasta</div>
+      <div class="cat-count">3 pasta dishes</div>
+      <a class="cat-link" href="menu.html?cat=pasta">Order →</a>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">🍫</span>
+      <div class="cat-name">Sweet Tooth</div>
+      <div class="cat-count">3 indulgent desserts</div>
+      <a class="cat-link" href="menu.html?cat=sweet">Order →</a>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">🥤</span>
+      <div class="cat-name">Shakes</div>
+      <div class="cat-count">4 milkshakes</div>
+      <a class="cat-link" href="menu.html?cat=shakes">Order →</a>
+    </div>
+    <div class="cat-card">
+      <span class="cat-icon">🍊</span>
+      <div class="cat-name">Drinks</div>
+      <div class="cat-count">Sodas, juice & water</div>
+      <a class="cat-link" href="menu.html?cat=drinks">Order →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROMISE -->
+<section class="promise-sec">
+  <div class="eyebrow">The MAD Promise</div>
+  <div class="promise-grid">
+    <div class="promise-text">
+      <div class="big-q">WE DON'T<br>CUT <span>CORNERS.</span></div>
+      <p class="promise-body">Every item on our menu is crafted with the freshest ingredients, bold flavours and 100% Halal standards. We started MAD in January 2025 with one simple goal — to give you premium fast food at a price that makes sense.</p>
+      <div class="promise-pillars">
+        <div class="pillar"><span class="pillar-icon">⭐</span><div class="pillar-name">Premium Quality</div><div class="pillar-desc">Fresh ingredients, no shortcuts.</div></div>
+        <div class="pillar"><span class="pillar-icon">🤝</span><div class="pillar-name">Top Service</div><div class="pillar-desc">Every order handled with care.</div></div>
+        <div class="pillar"><span class="pillar-icon">💛</span><div class="pillar-name">Pocket Friendly</div><div class="pillar-desc">Great food at fair prices.</div></div>
+        <div class="pillar"><span class="pillar-icon">☪</span><div class="pillar-name">100% Halal</div><div class="pillar-desc">Certified — order with confidence.</div></div>
+      </div>
+    </div>
+    <div class="promise-visual">
+      <div class="promise-circle">
+        <span class="promise-inner">🍔</span>
+        <div class="promise-ring"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <div>
+    <h2>READY TO <span>ORDER?</span></h2>
+    <p>Open daily from 12:00 PM to 3:00 AM · Delivery to your door</p>
+  </div>
+  <div class="cta-banner-btns">
+    <a class="btn-gold" href="menu.html">View Full Menu</a>
+    <a class="btn-outline" href="https://wa.me/2347047792000" target="_blank">WhatsApp Us</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <span class="fg-logo">MAD</span>
+      <span class="fg-sub">Munchies After Dark</span>
+      <p class="fg-desc">Premium quality fast food, top notch service, pocket friendly prices. Est. January 2025. 100% Halal Certified.</p>
+      <div class="fg-socials">
+        <a class="fg-soc" href="https://www.instagram.com/munchiesafterdarkng" target="_blank">📸</a>
+        <a class="fg-soc" href="https://wa.me/2347047792000" target="_blank">💬</a>
+      </div>
+    </div>
+    <div class="fc"><div class="fc-title">Hours</div><p>Open Every Day</p><p>12:00 PM – 3:00 AM</p></div>
+    <div class="fc"><div class="fc-title">Order</div><a href="menu.html">Order Online</a><a href="https://wa.me/2347047792000" target="_blank">WhatsApp Us</a><a href="https://munchies-after-dark.daash.restaurant/1" target="_blank">Daash</a></div>
+    <div class="fc"><div class="fc-title">Connect</div><a href="https://www.instagram.com/munchiesafterdarkng" target="_blank">@munchiesafterdarkng</a><a href="https://wa.me/2347047792000" target="_blank">+234 704 779 2000</a><p>☪ 100% Halal Certified</p></div>
+  </div>
+  <div class="footer-btm">
+    <p>© 2025 Munchies After Dark. All rights reserved.</p>
+    <p>Built with 🍔 in Nigeria</p>
+  </div>
+</footer>
+
+<!-- SHARED COMPONENTS -->
+<div class="overlay" id="overlay"></div>
+<div class="mob-nav" id="mobNav" style="display:none"></div>
+
+<!-- CART SIDEBAR -->
+<div class="cart-side" id="cartSide">
+  <div class="cs-hd"><div class="cs-title">Your Order</div><button class="cs-x" onclick="closeCart()">✕</button></div>
+  <div class="cs-steps">
+    <div class="cs-step active" id="cs-s1">① Cart</div>
+    <div class="cs-step" id="cs-s2">② Details</div>
+    <div class="cs-step" id="cs-s3">③ Payment</div>
+  </div>
+  <div class="cs-body" id="csStep1"><div id="cartItemsBody"><div class="empty-state"><span class="empty-icon">🍔</span><p>Your order is empty</p></div></div></div>
+  <div class="cs-body d-form" id="csStep2">
+    <p style="font-size:13px;color:var(--dim);font-weight:300;line-height:1.7;margin-bottom:18px;">Fill in your delivery details.</p>
+    <div class="fr"><div class="fg"><label class="fl">First Name *</label><input class="fi" id="df-fname" type="text" placeholder="John"><span class="ferr" id="df-fnameE">Required</span></div><div class="fg"><label class="fl">Last Name *</label><input class="fi" id="df-lname" type="text" placeholder="Doe"><span class="ferr" id="df-lnameE">Required</span></div></div>
+    <div class="fr"><div class="fg ff"><label class="fl">Phone *</label><input class="fi" id="df-phone" type="tel" placeholder="+234 000 000 0000"><span class="ferr" id="df-phoneE">Required</span></div></div>
+    <div class="fr"><div class="fg ff"><label class="fl">Email (for receipt)</label><input class="fi" id="df-email" type="email" placeholder="you@email.com"></div></div>
+    <div class="fr"><div class="fg ff"><label class="fl">Delivery Address *</label><input class="fi" id="df-address" type="text" placeholder="Full delivery address"><span class="ferr" id="df-addrE">Required</span></div></div>
+    <div class="fr"><div class="fg ff"><label class="fl">Notes (optional)</label><input class="fi" id="df-notes" type="text" placeholder="e.g. Extra sauce…"></div></div>
+  </div>
+  <div class="cs-body d-form" id="csStep3">
+    <p style="font-size:13px;color:var(--dim);font-weight:300;line-height:1.7;margin-bottom:16px;">How would you like to pay?</p>
+    <div class="method-grid">
+      <button class="method-card" id="mcPaystack" onclick="selectMethod('paystack')"><span class="mc-icon">💳</span><div class="mc-name">Pay Online</div><div class="mc-desc">Card / Bank Transfer</div></button>
+      <button class="method-card" id="mcWA" onclick="selectMethod('whatsapp')"><span class="mc-icon">💬</span><div class="mc-name">WhatsApp</div><div class="mc-desc">Pay on delivery</div></button>
+    </div>
+    <p id="methodNote" style="font-size:12px;color:var(--dim);line-height:1.7;margin-top:10px;min-height:36px;"></p>
+  </div>
+  <div class="cs-ft">
+    <div class="pr"><span>Subtotal</span><span id="csSubtotal">₦0</span></div>
+    <div class="pr"><span>Delivery</span><span style="color:#4caf50">To be confirmed</span></div>
+    <div class="gtr"><span class="gtl">Total</span><span class="gtv" id="csGrand">₦0</span></div>
+    <button class="act-btn" id="csAction" onclick="csHandleAction()" disabled>Continue to Details →</button>
+    <button class="back-btn" id="csBack" onclick="csGoBack()">← Back</button>
+  </div>
+</div>
+
+<!-- PAY MODAL -->
+<div class="pay-modal" id="payModal">
+  <div class="pay-box">
+    <button class="pay-x" onclick="closePayModal()">✕</button>
+    <div class="pay-title">Online Payment</div>
+    <p class="pay-sub">Secure checkout via Paystack.</p>
+    <span class="pay-amount" id="payAmount">₦0</span>
+    <div class="fg" style="margin-bottom:14px;"><label class="fl">Email *</label><input class="fi" id="payEmail" type="email" placeholder="your@email.com"><span class="ferr" id="payEmailErr">Enter a valid email</span></div>
+    <button class="act-btn" onclick="doPaystack()" style="margin-top:0;">Pay with Paystack</button>
+    <p class="pay-note">🔒 Secured by Paystack</p>
+    <p class="pay-warn">⚠️ Replace the Paystack key in app.js to activate payments.</p>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="suc-modal" id="sucModal">
+  <div class="suc-box">
+    <span class="suc-icon" id="sucIcon">🎉</span>
+    <div class="suc-title" id="sucTitle">Order Placed!</div>
+    <p class="suc-sub" id="sucSub">Your order is confirmed!</p>
+    <span class="suc-id" id="sucId">#MAD-0000</span>
+    <p class="suc-eta">Estimated delivery: <strong>30–45 minutes</strong></p>
+    <button class="suc-close" onclick="closeSuc()">Back to Menu</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

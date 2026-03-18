@@ -1,0 +1,200 @@
+<!-- ================================================
+     SHARED COMPONENTS — copy into every page
+     ================================================ -->
+
+<!-- HEADER -->
+<header id="hdr">
+  <a class="hdr-logo" href="index.html">
+    <span class="logo-mad">MAD</span>
+    <span class="logo-sub">Munchies After Dark</span>
+  </a>
+  <nav class="hdr-nav">
+    <a href="index.html" id="nav-home">Home</a>
+    <a href="about.html" id="nav-about">About</a>
+    <a href="menu.html" id="nav-menu">Menu</a>
+    <span class="halal-chip">☪ Halal</span>
+  </nav>
+  <div class="hdr-right">
+    <div class="status-badge">
+      <span class="sdot" id="sdot"></span>
+      <span class="stext" id="stxt"></span>
+    </div>
+    <button class="cart-pill" onclick="openCart()">
+      🛒 Order <span class="cart-num" id="cartCount">0</span>
+    </button>
+    <button class="hamburger" onclick="openMobNav()">☰</button>
+  </div>
+</header>
+
+<!-- MOBILE NAV -->
+<div class="mob-nav" id="mobNav">
+  <button class="mob-x" onclick="closeMobNav()">✕</button>
+  <div class="mob-nav-logo">MAD</div>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="menu.html">Menu & Order</a>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay"></div>
+
+<!-- CART SIDEBAR -->
+<div class="cart-side" id="cartSide">
+  <div class="cs-hd">
+    <div class="cs-title">Your Order</div>
+    <button class="cs-x" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cs-steps">
+    <div class="cs-step active" id="cs-s1">① Cart</div>
+    <div class="cs-step" id="cs-s2">② Details</div>
+    <div class="cs-step" id="cs-s3">③ Payment</div>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="cs-body" id="csStep1">
+    <div id="cartItemsBody">
+      <div class="empty-state"><span class="empty-icon">🍔</span><p>Your order is empty</p></div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="cs-body d-form" id="csStep2">
+    <p style="font-size:13px;color:var(--dim);font-weight:300;line-height:1.7;margin-bottom:18px;">Fill in your delivery details below.</p>
+    <div class="fr">
+      <div class="fg">
+        <label class="fl">First Name *</label>
+        <input class="fi" id="df-fname" type="text" placeholder="John">
+        <span class="ferr" id="df-fnameE">Required</span>
+      </div>
+      <div class="fg">
+        <label class="fl">Last Name *</label>
+        <input class="fi" id="df-lname" type="text" placeholder="Doe">
+        <span class="ferr" id="df-lnameE">Required</span>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg ff">
+        <label class="fl">Phone Number *</label>
+        <input class="fi" id="df-phone" type="tel" placeholder="+234 000 000 0000">
+        <span class="ferr" id="df-phoneE">Required</span>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg ff">
+        <label class="fl">Email (for receipt)</label>
+        <input class="fi" id="df-email" type="email" placeholder="you@email.com">
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg ff">
+        <label class="fl">Delivery Address *</label>
+        <input class="fi" id="df-address" type="text" placeholder="Full delivery address">
+        <span class="ferr" id="df-addrE">Required</span>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg ff">
+        <label class="fl">Notes (optional)</label>
+        <input class="fi" id="df-notes" type="text" placeholder="e.g. Extra sauce, no pickles…">
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="cs-body d-form" id="csStep3">
+    <p style="font-size:13px;color:var(--dim);font-weight:300;line-height:1.7;margin-bottom:16px;">How would you like to pay?</p>
+    <div class="method-grid">
+      <button class="method-card" id="mcPaystack" onclick="selectMethod('paystack')">
+        <span class="mc-icon">💳</span>
+        <div class="mc-name">Pay Online</div>
+        <div class="mc-desc">Card / Bank Transfer</div>
+      </button>
+      <button class="method-card" id="mcWA" onclick="selectMethod('whatsapp')">
+        <span class="mc-icon">💬</span>
+        <div class="mc-name">WhatsApp</div>
+        <div class="mc-desc">Pay on delivery</div>
+      </button>
+    </div>
+    <p id="methodNote" style="font-size:12px;color:var(--dim);line-height:1.7;margin-top:10px;min-height:36px;"></p>
+  </div>
+
+  <div class="cs-ft">
+    <div class="pr"><span>Subtotal</span><span id="csSubtotal">₦0</span></div>
+    <div class="pr"><span>Delivery</span><span style="color:#4caf50">To be confirmed</span></div>
+    <div class="gtr">
+      <span class="gtl">Total</span>
+      <span class="gtv" id="csGrand">₦0</span>
+    </div>
+    <button class="act-btn" id="csAction" onclick="csHandleAction()" disabled>Continue to Details →</button>
+    <button class="back-btn" id="csBack" onclick="csGoBack()">← Back</button>
+  </div>
+</div>
+
+<!-- PAYSTACK MODAL -->
+<div class="pay-modal" id="payModal">
+  <div class="pay-box">
+    <button class="pay-x" onclick="closePayModal()">✕</button>
+    <div class="pay-title">Online Payment</div>
+    <p class="pay-sub">Secure checkout via Paystack. Enter your email to receive a receipt.</p>
+    <span class="pay-amount" id="payAmount">₦0</span>
+    <div class="fg" style="margin-bottom:14px;">
+      <label class="fl">Email Address *</label>
+      <input class="fi" id="payEmail" type="email" placeholder="your@email.com">
+      <span class="ferr" id="payEmailErr">Please enter a valid email</span>
+    </div>
+    <button class="act-btn" onclick="doPaystack()" style="margin-top:0;">Pay with Paystack</button>
+    <p class="pay-note">🔒 Secured by Paystack · Card details never stored</p>
+    <p class="pay-warn">⚠️ Replace <strong>pk_test_REPLACE_WITH_YOUR_PAYSTACK_PUBLIC_KEY</strong> in app.js with your live key.</p>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="suc-modal" id="sucModal">
+  <div class="suc-box">
+    <span class="suc-icon" id="sucIcon">🎉</span>
+    <div class="suc-title" id="sucTitle">Order Placed!</div>
+    <p class="suc-sub" id="sucSub">Your order is confirmed and being prepared.</p>
+    <span class="suc-id" id="sucId">#MAD-0000</span>
+    <p class="suc-eta">Estimated delivery: <strong>30–45 minutes</strong></p>
+    <button class="suc-close" onclick="closeSuc()">Back to Menu</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <span class="fg-logo">MAD</span>
+      <span class="fg-sub">Munchies After Dark</span>
+      <p class="fg-desc">Premium quality fast food, top notch service, pocket friendly prices. Est. January 2025. 100% Halal Certified.</p>
+      <div class="fg-socials">
+        <a class="fg-soc" href="https://www.instagram.com/munchiesafterdarkng" target="_blank" title="Instagram">📸</a>
+        <a class="fg-soc" href="https://wa.me/2347047792000" target="_blank" title="WhatsApp">💬</a>
+      </div>
+    </div>
+    <div class="fc">
+      <div class="fc-title">Hours</div>
+      <p>Open Every Day</p>
+      <p>12:00 PM – 3:00 AM</p>
+    </div>
+    <div class="fc">
+      <div class="fc-title">Order</div>
+      <a href="menu.html">Order Online</a>
+      <a href="https://wa.me/2347047792000" target="_blank">WhatsApp Us</a>
+      <a href="https://munchies-after-dark.daash.restaurant/1" target="_blank">Daash</a>
+    </div>
+    <div class="fc">
+      <div class="fc-title">Connect</div>
+      <a href="https://www.instagram.com/munchiesafterdarkng" target="_blank">@munchiesafterdarkng</a>
+      <a href="https://wa.me/2347047792000" target="_blank">+234 704 779 2000</a>
+      <p>☪ 100% Halal Certified</p>
+    </div>
+  </div>
+  <div class="footer-btm">
+    <p>© 2025 Munchies After Dark. All rights reserved.</p>
+    <p>Built with 🍔 in Nigeria</p>
+  </div>
+</footer>
